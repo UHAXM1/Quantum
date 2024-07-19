@@ -1,0 +1,82 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum.vbproj|c:\\users\\uhax\\desktop\\quantum\\quantum\\main.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
+      "RelativeMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum.vbproj|solutionrelative:main.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum.vbproj|C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\my project\\resources.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}",
+      "RelativeMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum.vbproj|solutionrelative:my project\\resources.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum.vbproj|c:\\users\\uhax\\desktop\\quantum\\quantum\\quantum.vbproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum.vbproj|solutionrelative:quantum.vbproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum.vbproj|c:\\users\\uhax\\desktop\\quantum\\quantum\\quantum.vbproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum.vbproj|solutionrelative:quantum.vbproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Resources.resx",
+              "DocumentMoniker": "C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\My Project\\Resources.resx",
+              "RelativeDocumentMoniker": "My Project\\Resources.resx",
+              "ToolTip": "C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\My Project\\Resources.resx",
+              "RelativeToolTip": "My Project\\Resources.resx",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2024-07-17T16:34:24.191Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Quantum.vbproj",
+              "DocumentMoniker": "C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\Quantum.vbproj",
+              "RelativeDocumentMoniker": "Quantum.vbproj",
+              "ToolTip": "C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\Quantum.vbproj",
+              "RelativeToolTip": "Quantum.vbproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAiAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003380|",
+              "WhenOpened": "2024-07-17T16:04:36.161Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Quantum",
+              "DocumentMoniker": "C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\Quantum.vbproj",
+              "RelativeDocumentMoniker": "Quantum.vbproj",
+              "ToolTip": "C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\Quantum.vbproj",
+              "RelativeToolTip": "Quantum.vbproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003380|",
+              "WhenOpened": "2024-07-17T16:12:56.165Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Main.vb [Design]",
+              "DocumentMoniker": "C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\Main.vb",
+              "RelativeDocumentMoniker": "Main.vb",
+              "ToolTip": "C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\Main.vb [Design]",
+              "RelativeToolTip": "Main.vb [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2024-07-17T16:00:01.083Z",
+              "EditorCaption": " [Design]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
