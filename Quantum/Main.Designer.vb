@@ -256,7 +256,7 @@ Partial Class Main
         StartUpCheckBox.Name = "StartUpCheckBox"
         StartUpCheckBox.Size = New Size(360, 20)
         StartUpCheckBox.TabIndex = 8
-        StartUpCheckBox.Text = "Launch Quantum at user login"
+        StartUpCheckBox.Text = "Launch Quantum at Startup"
         StartUpCheckBox.TextAlign = ContentAlignment.MiddleCenter
         StartUpCheckBox.UseVisualStyleBackColor = True
         ' 

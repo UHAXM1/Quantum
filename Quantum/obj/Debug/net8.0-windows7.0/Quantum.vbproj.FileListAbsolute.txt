@@ -22,3 +22,4 @@ C:\Users\UHAX\Desktop\Quantum\Quantum\obj\Debug\net8.0-windows7.0\refint\Quantum
 C:\Users\UHAX\Desktop\Quantum\Quantum\obj\Debug\net8.0-windows7.0\Quantum.pdb
 C:\Users\UHAX\Desktop\Quantum\Quantum\obj\Debug\net8.0-windows7.0\Quantum.genruntimeconfig.cache
 C:\Users\UHAX\Desktop\Quantum\Quantum\obj\Debug\net8.0-windows7.0\ref\Quantum.dll
+C:\Users\UHAX\Desktop\Quantum\Quantum\obj\Debug\net8.0-windows7.0\Quantum.sourcelink.json

@@ -13,10 +13,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum.vbproj|c:\\users\\uhax\\desktop\\quantum\\quantum\\quantum.vbproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
       "RelativeMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum.vbproj|solutionrelative:quantum.vbproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum.vbproj|c:\\users\\uhax\\desktop\\quantum\\quantum\\quantum.vbproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
-      "RelativeMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum.vbproj|solutionrelative:quantum.vbproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
@@ -50,17 +46,6 @@
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAiAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003380|",
               "WhenOpened": "2024-07-17T16:04:36.161Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Quantum",
-              "DocumentMoniker": "C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\Quantum.vbproj",
-              "RelativeDocumentMoniker": "Quantum.vbproj",
-              "ToolTip": "C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\Quantum.vbproj",
-              "RelativeToolTip": "Quantum.vbproj",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003380|",
-              "WhenOpened": "2024-07-17T16:12:56.165Z"
             },
             {
               "$type": "Document",
