@@ -1,12 +1,70 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\UHAX\\Desktop\\Quantum\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum\\Quantum.vbproj|c:\\users\\uhax\\desktop\\quantum\\quantum\\main.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum\\Quantum.vbproj|solutionrelative:quantum\\main.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum\\Quantum.vbproj|c:\\users\\uhax\\desktop\\quantum\\quantum\\main.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
+      "RelativeMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum\\Quantum.vbproj|solutionrelative:quantum\\main.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum\\Quantum.vbproj|c:\\users\\uhax\\desktop\\quantum\\quantum\\quantum.vbproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{A6D98B7D-1E09-4F15-BCCD-C790378979C3}|Quantum\\Quantum.vbproj|solutionrelative:quantum\\quantum.vbproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Quantum",
+              "DocumentMoniker": "C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\Quantum.vbproj",
+              "RelativeDocumentMoniker": "Quantum\\Quantum.vbproj",
+              "ToolTip": "C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\Quantum.vbproj",
+              "RelativeToolTip": "Quantum\\Quantum.vbproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003380|",
+              "WhenOpened": "2024-07-20T15:31:24.843Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Main.vb",
+              "DocumentMoniker": "C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\Main.vb",
+              "RelativeDocumentMoniker": "Quantum\\Main.vb",
+              "ToolTip": "C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\Main.vb",
+              "RelativeToolTip": "Quantum\\Main.vb",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAApAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2024-07-20T13:55:53.663Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Main.vb [Design]",
+              "DocumentMoniker": "C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\Main.vb",
+              "RelativeDocumentMoniker": "Quantum\\Main.vb",
+              "ToolTip": "C:\\Users\\UHAX\\Desktop\\Quantum\\Quantum\\Main.vb [Design]",
+              "RelativeToolTip": "Quantum\\Main.vb [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2024-07-20T13:55:51.273Z",
+              "EditorCaption": " [Design]"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

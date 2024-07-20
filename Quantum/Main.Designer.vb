@@ -60,7 +60,6 @@ Partial Class Main
         AuthorLabel = New Label()
         AboutLabelProtonVPN = New Label()
         TrayContextMenuStrip = New ContextMenuStrip(components)
-        ShowToolStripMenuItem = New ToolStripMenuItem()
         ExitToolStripMenuItem = New ToolStripMenuItem()
         SettingsTableLayoutPanel.SuspendLayout()
         StatusStrip.SuspendLayout()
@@ -457,20 +456,14 @@ Partial Class Main
         ' 
         ' TrayContextMenuStrip
         ' 
-        TrayContextMenuStrip.Items.AddRange(New ToolStripItem() {ShowToolStripMenuItem, ExitToolStripMenuItem})
+        TrayContextMenuStrip.Items.AddRange(New ToolStripItem() {ExitToolStripMenuItem})
         TrayContextMenuStrip.Name = "ContextMenuStrip"
-        TrayContextMenuStrip.Size = New Size(181, 70)
-        ' 
-        ' ShowToolStripMenuItem
-        ' 
-        ShowToolStripMenuItem.Name = "ShowToolStripMenuItem"
-        ShowToolStripMenuItem.Size = New Size(180, 22)
-        ShowToolStripMenuItem.Text = "Show"
+        TrayContextMenuStrip.Size = New Size(94, 26)
         ' 
         ' ExitToolStripMenuItem
         ' 
         ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        ExitToolStripMenuItem.Size = New Size(180, 22)
+        ExitToolStripMenuItem.Size = New Size(93, 22)
         ExitToolStripMenuItem.Text = "Exit"
         ' 
         ' Main
@@ -543,7 +536,6 @@ Partial Class Main
     Friend WithEvents AboutLabelProtonVPN As Label
     Friend WithEvents StartUpCheckBox As CheckBox
     Friend WithEvents TrayContextMenuStrip As ContextMenuStrip
-    Friend WithEvents ShowToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ExitToolStripMenuItem As ToolStripMenuItem
 
 End Class
