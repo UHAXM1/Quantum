@@ -57,7 +57,7 @@ Partial Class Main
         TabPageAbout = New TabPage()
         AboutTableLayoutPanel = New TableLayoutPanel()
         AboutPictureBox = New PictureBox()
-        CopyrightLabel = New Label()
+        AuthorLabel = New Label()
         AboutLabelProtonVPN = New Label()
         TrayContextMenuStrip = New ContextMenuStrip(components)
         ShowToolStripMenuItem = New ToolStripMenuItem()
@@ -81,7 +81,7 @@ Partial Class Main
         TestSaveButton.Location = New Point(3, 167)
         TestSaveButton.Name = "TestSaveButton"
         TestSaveButton.Size = New Size(360, 40)
-        TestSaveButton.TabIndex = 5
+        TestSaveButton.TabIndex = 6
         TestSaveButton.Text = "Test/Save Settings"
         TestSaveButton.UseVisualStyleBackColor = True
         ' 
@@ -101,7 +101,7 @@ Partial Class Main
         VPNLogFile.MultiSelect = False
         VPNLogFile.Name = "VPNLogFile"
         VPNLogFile.Size = New Size(360, 99)
-        VPNLogFile.TabIndex = 8
+        VPNLogFile.TabIndex = 1
         VPNLogFile.UseCompatibleStateImageBehavior = False
         VPNLogFile.View = View.Details
         ' 
@@ -133,6 +133,7 @@ Partial Class Main
         HostTextBoxLabel.Name = "HostTextBoxLabel"
         HostTextBoxLabel.Size = New Size(64, 23)
         HostTextBoxLabel.TabIndex = 4
+        HostTextBoxLabel.TabStop = False
         HostTextBoxLabel.Text = "Host:"
         ' 
         ' HostTextBox
@@ -141,7 +142,7 @@ Partial Class Main
         HostTextBox.Location = New Point(73, 98)
         HostTextBox.Name = "HostTextBox"
         HostTextBox.Size = New Size(290, 23)
-        HostTextBox.TabIndex = 2
+        HostTextBox.TabIndex = 3
         ' 
         ' qBittorrentLabel
         ' 
@@ -163,6 +164,7 @@ Partial Class Main
         UsernameTextBoxLabel.Name = "UsernameTextBoxLabel"
         UsernameTextBoxLabel.Size = New Size(64, 23)
         UsernameTextBoxLabel.TabIndex = 6
+        UsernameTextBoxLabel.TabStop = False
         UsernameTextBoxLabel.Text = "Username:"
         ' 
         ' PasswordTextBoxLabel
@@ -173,6 +175,7 @@ Partial Class Main
         PasswordTextBoxLabel.Name = "PasswordTextBoxLabel"
         PasswordTextBoxLabel.Size = New Size(64, 23)
         PasswordTextBoxLabel.TabIndex = 7
+        PasswordTextBoxLabel.TabStop = False
         PasswordTextBoxLabel.Text = "Password:"
         ' 
         ' UsernameTextBox
@@ -181,7 +184,7 @@ Partial Class Main
         UsernameTextBox.Location = New Point(73, 121)
         UsernameTextBox.Name = "UsernameTextBox"
         UsernameTextBox.Size = New Size(290, 23)
-        UsernameTextBox.TabIndex = 3
+        UsernameTextBox.TabIndex = 4
         ' 
         ' PasswordTextBox
         ' 
@@ -189,7 +192,7 @@ Partial Class Main
         PasswordTextBox.Location = New Point(73, 144)
         PasswordTextBox.Name = "PasswordTextBox"
         PasswordTextBox.Size = New Size(290, 23)
-        PasswordTextBox.TabIndex = 4
+        PasswordTextBox.TabIndex = 5
         PasswordTextBox.UseSystemPasswordChar = True
         ' 
         ' SettingsTableLayoutPanel
@@ -232,7 +235,7 @@ Partial Class Main
         LogFileSelectButton.Location = New Point(3, 29)
         LogFileSelectButton.Name = "LogFileSelectButton"
         LogFileSelectButton.Size = New Size(360, 40)
-        LogFileSelectButton.TabIndex = 1
+        LogFileSelectButton.TabIndex = 2
         LogFileSelectButton.Text = "Select ProtonVPN Log File"
         LogFileSelectButton.UseVisualStyleBackColor = True
         ' 
@@ -243,7 +246,7 @@ Partial Class Main
         UpdateButton.Location = New Point(3, 213)
         UpdateButton.Name = "UpdateButton"
         UpdateButton.Size = New Size(360, 40)
-        UpdateButton.TabIndex = 6
+        UpdateButton.TabIndex = 7
         UpdateButton.Text = "Force Port Update Now"
         UpdateButton.UseVisualStyleBackColor = True
         ' 
@@ -255,7 +258,7 @@ Partial Class Main
         StartUpCheckBox.Location = New Point(3, 3)
         StartUpCheckBox.Name = "StartUpCheckBox"
         StartUpCheckBox.Size = New Size(360, 20)
-        StartUpCheckBox.TabIndex = 8
+        StartUpCheckBox.TabIndex = 1
         StartUpCheckBox.Text = "Launch Quantum at Startup"
         StartUpCheckBox.TextAlign = ContentAlignment.MiddleCenter
         StartUpCheckBox.UseVisualStyleBackColor = True
@@ -306,7 +309,7 @@ Partial Class Main
         MainTabControl.Name = "MainTabControl"
         MainTabControl.SelectedIndex = 0
         MainTabControl.Size = New Size(380, 291)
-        MainTabControl.TabIndex = 7
+        MainTabControl.TabIndex = 8
         ' 
         ' TabPageSettings
         ' 
@@ -362,7 +365,7 @@ Partial Class Main
         QLogFile.MultiSelect = False
         QLogFile.Name = "QLogFile"
         QLogFile.Size = New Size(360, 100)
-        QLogFile.TabIndex = 9
+        QLogFile.TabIndex = 2
         QLogFile.UseCompatibleStateImageBehavior = False
         QLogFile.View = View.Details
         ' 
@@ -405,7 +408,7 @@ Partial Class Main
         AboutTableLayoutPanel.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 62.4976578F))
         AboutTableLayoutPanel.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 18.7511711F))
         AboutTableLayoutPanel.Controls.Add(AboutPictureBox, 1, 1)
-        AboutTableLayoutPanel.Controls.Add(CopyrightLabel, 1, 0)
+        AboutTableLayoutPanel.Controls.Add(AuthorLabel, 1, 0)
         AboutTableLayoutPanel.Controls.Add(AboutLabelProtonVPN, 0, 2)
         AboutTableLayoutPanel.Dock = DockStyle.Fill
         AboutTableLayoutPanel.Location = New Point(0, 0)
@@ -429,16 +432,16 @@ Partial Class Main
         AboutPictureBox.TabIndex = 0
         AboutPictureBox.TabStop = False
         ' 
-        ' CopyrightLabel
+        ' AuthorLabel
         ' 
-        CopyrightLabel.AutoSize = True
-        CopyrightLabel.Dock = DockStyle.Fill
-        CopyrightLabel.Location = New Point(72, 0)
-        CopyrightLabel.Name = "CopyrightLabel"
-        CopyrightLabel.Size = New Size(226, 49)
-        CopyrightLabel.TabIndex = 1
-        CopyrightLabel.Text = "Copyright © UHAX"
-        CopyrightLabel.TextAlign = ContentAlignment.MiddleCenter
+        AuthorLabel.AutoSize = True
+        AuthorLabel.Dock = DockStyle.Fill
+        AuthorLabel.Location = New Point(72, 0)
+        AuthorLabel.Name = "AuthorLabel"
+        AuthorLabel.Size = New Size(226, 49)
+        AuthorLabel.TabIndex = 1
+        AuthorLabel.Text = "By UHAX"
+        AuthorLabel.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' AboutLabelProtonVPN
         ' 
@@ -456,18 +459,18 @@ Partial Class Main
         ' 
         TrayContextMenuStrip.Items.AddRange(New ToolStripItem() {ShowToolStripMenuItem, ExitToolStripMenuItem})
         TrayContextMenuStrip.Name = "ContextMenuStrip"
-        TrayContextMenuStrip.Size = New Size(104, 48)
+        TrayContextMenuStrip.Size = New Size(181, 70)
         ' 
         ' ShowToolStripMenuItem
         ' 
         ShowToolStripMenuItem.Name = "ShowToolStripMenuItem"
-        ShowToolStripMenuItem.Size = New Size(103, 22)
+        ShowToolStripMenuItem.Size = New Size(180, 22)
         ShowToolStripMenuItem.Text = "Show"
         ' 
         ' ExitToolStripMenuItem
         ' 
         ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        ExitToolStripMenuItem.Size = New Size(103, 22)
+        ExitToolStripMenuItem.Size = New Size(180, 22)
         ExitToolStripMenuItem.Text = "Exit"
         ' 
         ' Main
@@ -536,7 +539,7 @@ Partial Class Main
     Friend WithEvents TabPageAbout As TabPage
     Friend WithEvents AboutTableLayoutPanel As TableLayoutPanel
     Friend WithEvents AboutPictureBox As PictureBox
-    Friend WithEvents CopyrightLabel As Label
+    Friend WithEvents AuthorLabel As Label
     Friend WithEvents AboutLabelProtonVPN As Label
     Friend WithEvents StartUpCheckBox As CheckBox
     Friend WithEvents TrayContextMenuStrip As ContextMenuStrip

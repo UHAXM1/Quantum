@@ -16,7 +16,7 @@ Imports System.Reflection
 <Assembly: System.Reflection.AssemblyCompanyAttribute("Quantum"),  _
  Assembly: System.Reflection.AssemblyConfigurationAttribute("Debug"),  _
  Assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0"),  _
- Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5a47b003945fbc5cdf096180ff70354484f453ef"),  _
+ Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+82a4ade4e349346feca88da54b4df849641bc167"),  _
  Assembly: System.Reflection.AssemblyProductAttribute("Quantum"),  _
  Assembly: System.Reflection.AssemblyTitleAttribute("Quantum"),  _
  Assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0"),  _
