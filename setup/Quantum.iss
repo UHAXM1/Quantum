@@ -29,7 +29,7 @@ OutputBaseFilename=Quantum_Setup
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
-SetupIconFile=images\Q_32.ico
+SetupIconFile=..\images\Q_32.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 UninstallDisplayName={#MyAppName}
 
