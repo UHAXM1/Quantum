@@ -3,12 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "Quantum", "Quantum\Quantum.vbproj", "{A6D98B7D-1E09-4F15-BCCD-C790378979C3}"
-	ProjectSection(ProjectDependencies) = postProject
-		{83722ABF-502D-450C-83BF-FD3BD1BB7CAF} = {83722ABF-502D-450C-83BF-FD3BD1BB7CAF}
-	EndProjectSection
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "Quantum", "scr\Quantum\Quantum.vbproj", "{30531C2D-55A9-4D8B-AF43-793ABFB4B0EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QBittorrent.Client", "Libs\qbittorrent-net-client\src\QBittorrent.Client\QBittorrent.Client.csproj", "{83722ABF-502D-450C-83BF-FD3BD1BB7CAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QBittorrent.Client", "libs\qbittorrent-net-client\src\QBittorrent.Client\QBittorrent.Client.csproj", "{DBFF66A1-0075-41CE-B9CC-1418EF2AD158}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A6D98B7D-1E09-4F15-BCCD-C790378979C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A6D98B7D-1E09-4F15-BCCD-C790378979C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A6D98B7D-1E09-4F15-BCCD-C790378979C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A6D98B7D-1E09-4F15-BCCD-C790378979C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{83722ABF-502D-450C-83BF-FD3BD1BB7CAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{83722ABF-502D-450C-83BF-FD3BD1BB7CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{83722ABF-502D-450C-83BF-FD3BD1BB7CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{83722ABF-502D-450C-83BF-FD3BD1BB7CAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30531C2D-55A9-4D8B-AF43-793ABFB4B0EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30531C2D-55A9-4D8B-AF43-793ABFB4B0EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30531C2D-55A9-4D8B-AF43-793ABFB4B0EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30531C2D-55A9-4D8B-AF43-793ABFB4B0EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBFF66A1-0075-41CE-B9CC-1418EF2AD158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBFF66A1-0075-41CE-B9CC-1418EF2AD158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBFF66A1-0075-41CE-B9CC-1418EF2AD158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBFF66A1-0075-41CE-B9CC-1418EF2AD158}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

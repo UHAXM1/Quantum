@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Quantum"
-#define MyAppVersion "1.0"
+#define MyAppVersion "1.0.0.0"
 #define MyAppExeName "Quantum.exe"
 
 [Setup]
@@ -29,7 +29,7 @@ OutputBaseFilename=Quantum_Setup
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
-SetupIconFile=Images\Q_32.ico
+SetupIconFile=images\Q_32.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 UninstallDisplayName={#MyAppName}
 
@@ -40,16 +40,16 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: checkedonce
 
 [Files]
-Source: "C:\Users\UHAX\Desktop\Quantum\Quantum\bin\Release\net8.0-windows7.0\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\UHAX\Desktop\Quantum\Quantum\bin\Release\net8.0-windows7.0\Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\UHAX\Desktop\Quantum\Quantum\bin\Release\net8.0-windows7.0\Quantum.deps.json"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\UHAX\Desktop\Quantum\Quantum\bin\Release\net8.0-windows7.0\Quantum.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\UHAX\Desktop\Quantum\Quantum\bin\Release\net8.0-windows7.0\Quantum.dll.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\UHAX\Desktop\Quantum\Quantum\bin\Release\net8.0-windows7.0\Quantum.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\UHAX\Desktop\Quantum\Quantum\bin\Release\net8.0-windows7.0\Quantum.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\UHAX\Desktop\Quantum\Quantum\bin\Release\net8.0-windows7.0\QBittorrent.Client.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\UHAX\Desktop\Quantum\Quantum\bin\Release\net8.0-windows7.0\QBittorrent.Client.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\UHAX\Desktop\Quantum\Quantum\bin\Release\net8.0-windows7.0\QBittorrent.Client.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\scr\Quantum\bin\Release\net8.0-windows7.0\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\scr\Quantum\bin\Release\net8.0-windows7.0\Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\scr\Quantum\bin\Release\net8.0-windows7.0\Quantum.deps.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\scr\Quantum\bin\Release\net8.0-windows7.0\Quantum.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\scr\Quantum\bin\Release\net8.0-windows7.0\Quantum.dll.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\scr\Quantum\bin\Release\net8.0-windows7.0\Quantum.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\scr\Quantum\bin\Release\net8.0-windows7.0\Quantum.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\scr\Quantum\bin\Release\net8.0-windows7.0\QBittorrent.Client.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\scr\Quantum\bin\Release\net8.0-windows7.0\QBittorrent.Client.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\scr\Quantum\bin\Release\net8.0-windows7.0\QBittorrent.Client.xml"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
