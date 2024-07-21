@@ -1,3 +1,0 @@
-[submodule "Libs/qbittorrent-net-client"]
-	path = Libs/qbittorrent-net-client
-	url = https://github.com/fedarovich/qbittorrent-net-client.git
