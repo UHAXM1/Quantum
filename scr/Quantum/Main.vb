@@ -428,7 +428,7 @@ Public Class Main
     Private Sub Main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         ' Set the main form title with version number
-        Me.Text = Me.Text & " - " & My.Application.Info.Version.ToString
+        Me.Text = Me.Text & " - v" & My.Application.Info.Version.ToString
 
         ' Set the main form size
         Me.Size = New Size(400, 356)
