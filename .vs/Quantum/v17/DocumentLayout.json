@@ -1,53 +1,12 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\UHAX\\Desktop\\Quantum\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{30531C2D-55A9-4D8B-AF43-793ABFB4B0EA}|scr\\Quantum\\Quantum.vbproj|c:\\users\\uhax\\desktop\\quantum\\scr\\quantum\\main.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
-      "RelativeMoniker": "D:0:0:{30531C2D-55A9-4D8B-AF43-793ABFB4B0EA}|scr\\Quantum\\Quantum.vbproj|solutionrelative:scr\\quantum\\main.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{30531C2D-55A9-4D8B-AF43-793ABFB4B0EA}|scr\\Quantum\\Quantum.vbproj|c:\\users\\uhax\\desktop\\quantum\\scr\\quantum\\main.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
-      "RelativeMoniker": "D:0:0:{30531C2D-55A9-4D8B-AF43-793ABFB4B0EA}|scr\\Quantum\\Quantum.vbproj|solutionrelative:scr\\quantum\\main.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": [
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Main.vb",
-              "DocumentMoniker": "C:\\Users\\UHAX\\Desktop\\Quantum\\scr\\Quantum\\Main.vb",
-              "RelativeDocumentMoniker": "scr\\Quantum\\Main.vb",
-              "ToolTip": "C:\\Users\\UHAX\\Desktop\\Quantum\\scr\\Quantum\\Main.vb",
-              "RelativeToolTip": "scr\\Quantum\\Main.vb",
-              "ViewState": "AQIAAOYAAAAAAAAAAAAAAPYAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
-              "WhenOpened": "2024-07-21T13:45:55.379Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Main.vb [Design]",
-              "DocumentMoniker": "C:\\Users\\UHAX\\Desktop\\Quantum\\scr\\Quantum\\Main.vb",
-              "RelativeDocumentMoniker": "scr\\Quantum\\Main.vb",
-              "ToolTip": "C:\\Users\\UHAX\\Desktop\\Quantum\\scr\\Quantum\\Main.vb [Design]",
-              "RelativeToolTip": "scr\\Quantum\\Main.vb [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
-              "WhenOpened": "2024-07-21T13:45:47.126Z",
-              "EditorCaption": " [Design]"
-            }
-          ]
-        }
-      ]
+      "DocumentGroups": []
     }
   ]
 }

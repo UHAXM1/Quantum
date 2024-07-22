@@ -245,6 +245,10 @@ Public Class Main
 
                 End If
 
+            Else
+
+                LogOutput("No valid port information found in logs", True, False)
+
             End If
 
         Catch ex As Exception
