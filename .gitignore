@@ -9,3 +9,4 @@
 *.vspscc
 *.vssscc
 *.exe
+/scr/Quantum/obj
