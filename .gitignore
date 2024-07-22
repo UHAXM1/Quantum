@@ -1,5 +1,5 @@
-**/bin
-**/obj
+**/bin/
+**/obj/
 *.user
 *.suo
 *.pdb
@@ -10,3 +10,4 @@
 *.vssscc
 *.exe
 /scr/Quantum/obj
+.vs/
