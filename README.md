@@ -17,38 +17,38 @@ Detailed setup steps:
 
 qBittorrent Setup
 
- Open qBittorrent:
- Launch qBittorrent on your computer.
+	Open qBittorrent:
+		Launch qBittorrent on your computer.
+ 
+	Access Preferences:
+		Go to Tools > Options or press Alt + O to open the preferences window.
 
- Access Preferences:
- Go to Tools > Options or press Alt + O to open the preferences window.
+	Enable WebUI:
+		In the preferences window, select the Web UI section.
+		Check the box for Enable Web User Interface (Remote control).
+		You can leave the default IP address (usually 127.0.0.1 for local access) and Port (default is 8080), or change them if needed.
 
- Enable WebUI:
- In the preferences window, select the Web UI section.
-        Check the box for Enable Web User Interface (Remote control).
-        You can leave the default IP address (usually 127.0.0.1 for local access) and Port (default is 8080), or change them if needed.
-
- Set Authentication:
- Under Authentication, check the box for Use a username and password.
-        Enter a Username (default is admin).
-        Enter and confirm a Password.
+	Set Authentication:
+		Under Authentication, check the box for Use a username and password.
+		Enter a Username (default is admin).
+		Enter and confirm a Password.
 		Optionally you can enable Bypass authentication for clients on localhost, if you just set this you can leave the username and password blank.
 
- Configure IP and Port:
- If you want to access the WebUI from other devices on your network, you may need to change the IP address to 0.0.0.0 to allow access from all network interfaces.
-        Make sure the port you are using is not blocked by your firewall.
+	Configure IP and Port:
+		If you want to access the WebUI from other devices on your network, you may need to change the IP address to 0.0.0.0 to allow access from all network interfaces.
+		Make sure the port you are using is not blocked by your firewall.
 
- Security Options:
- Optionally, you can set up an IP filter to restrict which IP addresses can access the WebUI.
-        You can also enable HTTPS to secure the connection by providing an SSL certificate and key.
+	Security Options:
+		Optionally, you can set up an IP filter to restrict which IP addresses can access the WebUI.
+		You can also enable HTTPS to secure the connection by providing an SSL certificate and key.
 
- Apply and Save:
- Click Apply and then OK to save your settings.
+	Apply and Save:
+		Click Apply and then OK to save your settings.
 
- Access the WebUI:
- Open a web browser and go to http://: (e.g., http://127.0.0.1:8080 for local access).
-        Log in with the username and password you set.
-		
+	Access the WebUI:
+		Open a web browser and go to http://: (e.g., http://127.0.0.1:8080 for local access).
+		Log in with the username and password you set.
+	
 Quantum setup
 
 	Open Quantum:
