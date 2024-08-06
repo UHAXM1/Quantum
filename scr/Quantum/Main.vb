@@ -156,6 +156,57 @@ Public Class Main
             ' Temp port as negative value
             Dim TempValidPort As Integer = -1
 
+            ' If no log files can be found search the registry to find it, this is need incase ProtonVPN has been updated to a new version
+            ' Check for the archived log file first
+            If Not File.Exists(Path.GetDirectoryName(My.Settings.FilePath) & "\service-logs.1.txt") Then
+
+                ' Check for the primary log file
+                If Not File.Exists(My.Settings.FilePath) Then
+
+                    Dim InstallLocationKeyPath As String = "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Proton VPN_is1"
+
+                    Using InstallLocationKey As RegistryKey = Registry.LocalMachine.OpenSubKey(InstallLocationKeyPath, False)
+
+                        If InstallLocationKey IsNot Nothing Then
+
+                            ' Get the install location
+                            Dim InstallLocationObject As Object = InstallLocationKey.GetValue("InstallLocation")
+
+                            If InstallLocationObject IsNot Nothing AndAlso TypeOf InstallLocationObject Is String Then
+
+                                Using VersionKey As RegistryKey = Registry.LocalMachine.OpenSubKey(InstallLocationKeyPath, False)
+
+                                    ' Get the current PrtonVPN vesion
+                                    Dim VersionObject As Object = InstallLocationKey.GetValue("DisplayVersion")
+
+                                    If VersionObject IsNot Nothing AndAlso TypeOf VersionObject Is String Then
+
+                                        ' Combine found information into file path
+                                        Dim LogFileLocation As String = InstallLocationObject & "v" & VersionObject & "\ServiceData\Logs\service-logs.txt"
+
+                                        ' If log file found via registry
+                                        If File.Exists(LogFileLocation) Then
+
+                                            ' Update settings and save
+                                            My.Settings.FilePath = LogFileLocation
+                                            My.Settings.Save()
+
+                                        End If
+
+                                    End If
+
+                                End Using
+
+                            End If
+
+                        End If
+
+                    End Using
+
+                End If
+
+            End If
+
             ' Get the log file directory from the filepath
             Dim ArchivedPathDirectory As String = Path.GetDirectoryName(My.Settings.FilePath)
 
@@ -179,15 +230,6 @@ Public Class Main
 
                 End If
 
-            Else
-
-                ' Here for debugging
-                If System.Diagnostics.Debugger.IsAttached Then
-
-                    MessageBox.Show("Archived Log File Not Found")
-
-                End If
-
             End If
 
             ' Get the log file directory from the filepath, if it exisits process
@@ -204,15 +246,6 @@ Public Class Main
                 Else
 
                     ' No port data found
-
-                End If
-
-            Else
-
-                ' Here for debugging
-                If System.Diagnostics.Debugger.IsAttached Then
-
-                    MessageBox.Show("Primary Log File Not Found")
 
                 End If
 
@@ -258,6 +291,7 @@ Public Class Main
         Finally
 
             ' Update UI
+            UpdateSelectButton()
             TestSaveButton.Enabled = True
             UpdateButton.Text = "Force Port Update Now"
             UpdateButton.Enabled = True
@@ -507,16 +541,11 @@ Public Class Main
         If Not File.Exists(My.Settings.FilePath) Then
 
             ' Prompt the user to locate the log file
-            SelectLogFileManually()
+            SelectLogFileManually(True)
 
         End If
 
-        If File.Exists(My.Settings.FilePath) Then
-
-            ' If log file found update the UI
-            LogFileSelectButton.Text = "ProtonVPN Log File Found!   (...)"
-
-        End If
+        UpdateSelectButton()
 
         ' Update UI with saved host/user/pass
         HostTextBox.Text = My.Settings.Host
@@ -550,6 +579,22 @@ Public Class Main
 
     End Sub
 
+    Private Sub UpdateSelectButton()
+
+        If File.Exists(My.Settings.FilePath) Then
+
+            ' If log file found update the UI
+            LogFileSelectButton.Text = "ProtonVPN Log File Found!   (...)"
+
+        Else
+
+            ' If log file not found update the UI
+            LogFileSelectButton.Text = "Select ProtonVPN Log File   (...)"
+
+        End If
+
+    End Sub
+
     ' User clicked Test/Save button
     Private Sub TestSaveButton_Click(sender As Object, e As EventArgs) Handles TestSaveButton.Click
 
@@ -559,7 +604,7 @@ Public Class Main
     End Sub
 
     ' Pormpts the user to find the ProtonVPN log file
-    Private Sub SelectLogFileManually()
+    Private Sub SelectLogFileManually(ByVal Optional pForced As Boolean = False)
 
         Try
 
@@ -602,21 +647,50 @@ Public Class Main
 
             End Using
 
+            ' If no valid file log exists use the forced dialog text
+            If pForced = False Then
+
+                If Not File.Exists(My.Settings.FilePath) Then
+
+                    pForced = True
+
+                End If
+
+            End If
+
             Dim Result As DialogResult
 
             If LogicLocation Then
 
-                ' Show a yes/no dialog with a logic path example
-                Result = MessageBox.Show("Do you want to select a diffrent ProtonVPN log file location? Here is an example location of where you can find it: " & vbCrLf & LogicFileLocation, "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                If pForced = False Then
+
+                    ' Show a yes/no dialog with a logic path example
+                    Result = MessageBox.Show("Do you want to select a diffrent ProtonVPN log file location? Here is an example location of where you can find it: " & vbCrLf & LogicFileLocation, "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+                Else
+
+                    ' Show a forced dialog with a logic path example
+                    Result = MessageBox.Show("Quantum is unable to locate the ProtonVPN log file, you must select a log file in the next screen, here is an example location of where you can find it: " & vbCrLf & LogicFileLocation, "Confirmation", MessageBoxButtons.OK, MessageBoxIcon.Question)
+
+                End If
 
             Else
 
-                ' Show a yes/no dialog with a static path example 
-                Result = MessageBox.Show("Do you want to select a diffrent ProtonVPN log file location? Here is an example location of where you can find it: " & vbCrLf & "C:\Program Files\Proton\VPN\v3.2.12\ServiceData\Logs\service-logs.txt", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                If pForced = False Then
+
+                    ' Show a yes/no dialog with a static path example 
+                    Result = MessageBox.Show("Do you want to select a diffrent ProtonVPN log file location? Here is an example location of where you can find it: " & vbCrLf & "C:\Program Files\Proton\VPN\v3.3.0\ServiceData\Logs\service-logs.txt", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+                Else
+
+                    ' Show a focred dialog with a static path example 
+                    Result = MessageBox.Show("Quantum is unable to locate the ProtonVPN log file, you must select a log file in the next screen, here is an example location of where you can find it: " & vbCrLf & "C:\Program Files\Proton\VPN\v3.3.0\ServiceData\Logs\service-logs.txt", "Confirmation", MessageBoxButtons.OK, MessageBoxIcon.Question)
+
+                End If
 
             End If
 
-            If Result = DialogResult.Yes Then
+            If Result = DialogResult.Yes Or Result = DialogResult.OK Then
 
                 ' User wants to locate log file
                 Dim LogFileOpenFileDialog As New OpenFileDialog()
@@ -643,6 +717,20 @@ Public Class Main
                     ' User has selected valid log file
                     My.Settings.FilePath = LogFileOpenFileDialog.FileName
                     My.Settings.Save()
+
+                Else
+
+                    ' Show warning if no currect valid log file selecetd
+                    If Not File.Exists(My.Settings.FilePath) Then
+
+                        ' Popup on desktop
+                        Me.Show()
+                        Me.WindowState = FormWindowState.Normal
+                        Me.BringToFront()
+
+                        MessageBox.Show("Quantum cannot run properly without a valid log file!!!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+
+                    End If
 
                 End If
 
@@ -755,6 +843,7 @@ Public Class Main
             ' Currently in the system tray, popup on desktop
             Me.Show()
             Me.WindowState = FormWindowState.Normal
+            Me.BringToFront()
 
         End If
 
@@ -942,4 +1031,29 @@ Public Class Main
 
     End Sub
 
+    Private Sub ShowToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ShowToolStripMenuItem.Click
+
+        ' Popup on desktop
+        Me.Show()
+        Me.WindowState = FormWindowState.Normal
+        Me.BringToFront()
+
+    End Sub
+
+    Private Sub UpdateNowToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UpdateNowToolStripMenuItem.Click
+
+        Try
+
+            ' Call task to test connection, this allways checks for an updated port
+            Dim DoTask As Task = CheckConnection()
+
+        Catch ex As Exception
+
+            LogOutput(ex.Message, True, True)
+
+        Finally
+
+        End Try
+
+    End Sub
 End Class

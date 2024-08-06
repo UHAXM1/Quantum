@@ -60,6 +60,8 @@ Partial Class Main
         AuthorLabel = New Label()
         AboutLabelProtonVPN = New Label()
         TrayContextMenuStrip = New ContextMenuStrip(components)
+        ShowToolStripMenuItem = New ToolStripMenuItem()
+        UpdateNowToolStripMenuItem = New ToolStripMenuItem()
         ExitToolStripMenuItem = New ToolStripMenuItem()
         SettingsTableLayoutPanel.SuspendLayout()
         StatusStrip.SuspendLayout()
@@ -235,7 +237,7 @@ Partial Class Main
         LogFileSelectButton.Name = "LogFileSelectButton"
         LogFileSelectButton.Size = New Size(360, 40)
         LogFileSelectButton.TabIndex = 2
-        LogFileSelectButton.Text = "Select ProtonVPN Log File"
+        LogFileSelectButton.Text = "Select ProtonVPN Log File   (...)"
         LogFileSelectButton.UseVisualStyleBackColor = True
         ' 
         ' UpdateButton
@@ -246,7 +248,7 @@ Partial Class Main
         UpdateButton.Name = "UpdateButton"
         UpdateButton.Size = New Size(360, 40)
         UpdateButton.TabIndex = 7
-        UpdateButton.Text = "Force Port Update Now"
+        UpdateButton.Text = "Update Now"
         UpdateButton.UseVisualStyleBackColor = True
         ' 
         ' StartUpCheckBox
@@ -456,14 +458,26 @@ Partial Class Main
         ' 
         ' TrayContextMenuStrip
         ' 
-        TrayContextMenuStrip.Items.AddRange(New ToolStripItem() {ExitToolStripMenuItem})
+        TrayContextMenuStrip.Items.AddRange(New ToolStripItem() {ShowToolStripMenuItem, UpdateNowToolStripMenuItem, ExitToolStripMenuItem})
         TrayContextMenuStrip.Name = "ContextMenuStrip"
-        TrayContextMenuStrip.Size = New Size(94, 26)
+        TrayContextMenuStrip.Size = New Size(141, 70)
+        ' 
+        ' ShowToolStripMenuItem
+        ' 
+        ShowToolStripMenuItem.Name = "ShowToolStripMenuItem"
+        ShowToolStripMenuItem.Size = New Size(140, 22)
+        ShowToolStripMenuItem.Text = "Show"
+        ' 
+        ' UpdateNowToolStripMenuItem
+        ' 
+        UpdateNowToolStripMenuItem.Name = "UpdateNowToolStripMenuItem"
+        UpdateNowToolStripMenuItem.Size = New Size(140, 22)
+        UpdateNowToolStripMenuItem.Text = "Update Now"
         ' 
         ' ExitToolStripMenuItem
         ' 
         ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        ExitToolStripMenuItem.Size = New Size(93, 22)
+        ExitToolStripMenuItem.Size = New Size(140, 22)
         ExitToolStripMenuItem.Text = "Exit"
         ' 
         ' Main
@@ -537,5 +551,7 @@ Partial Class Main
     Friend WithEvents StartUpCheckBox As CheckBox
     Friend WithEvents TrayContextMenuStrip As ContextMenuStrip
     Friend WithEvents ExitToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ShowToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents UpdateNowToolStripMenuItem As ToolStripMenuItem
 
 End Class
