@@ -13,9 +13,6 @@ Simply install and provide connection information to qBittorrent, Quantum will a
 
 Quantum will check the logs files once every minute.
 
-!!!IMPORTANT!!!
-You should disable ProtonVPNs autoupdate feature!, when you want to update ProtonVPN close Quantum first then download and run the updated ProtonVPN installer then restart Quantum.
-	
 Detailed setup steps:
 
 qBittorrent Setup
