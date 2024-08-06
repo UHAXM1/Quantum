@@ -1,6 +1,6 @@
-# Automatic qBittorent Port Updater for ProtonVPN
+# Automatic qBittorrent Port Updater for ProtonVPN
 
-This application will monitor the Windows ProtonVPN client log files for port changes and pass them via the qBittorrent WebUI
+This application will monitor the Windows ProtonVPN client log files for port changes and pass them via the qBittorrent WebUI.
 
 Uses the qBittorrent-net-client library found here
 https://github.com/fedarovich/qbittorrent-net-client
@@ -11,7 +11,7 @@ Requires .Net 8
 
 Simply install and provide connection information to qBittorrent, Quantum will automatically try to find the ProtonVPN log directory
 
-Quantum will check the logs files once every minute
+Quantum will check the logs files once every minute.
 
 !!!IMPORTANT!!!
 You should disable ProtonVPNs autoupdate feature!, when you want to update ProtonVPN close Quantum first then download and run the updated ProtonVPN installer then restart Quantum.
