@@ -5,7 +5,7 @@ This application will monitor the Windows ProtonVPN client log files for port ch
 Uses the qBittorrent-net-client library found here
 https://github.com/fedarovich/qbittorrent-net-client
 
-Tested with ProtonVPN version 3.2.12
+Tested with ProtonVPN version 3.2.12 and 3.3.0
 
 Requires.Net 8
 
@@ -62,7 +62,7 @@ Quantum setup
 		
 	qBittorrent Configuration:
 		Host: this should be 'http://127.0.0.1:8080' by default, if you are not using the default port or want to connect to a remote instance change the ip and port number here, if you are using SSL you need to change http to https.
-		Username and Password: Input the username and password you setup in the Qbittorrent setup above, if you have enabled Bypass authentication for client on localhost and are local you can leave this blank.
+		Username and Password: Input the username and password you setup in the qBittorrent setup above, if you have enabled Bypass authentication for client on localhost and are local you can leave this blank.
 		
 	Test/Save:
 		Click this button to Test then save the current configuration, you will get a popup telling you if the connection is a successful.
@@ -70,4 +70,4 @@ Quantum setup
 	Force Port Update Now:
 		Click this button to force Quantum to do a port update right away. Only needs to be used if you cant be bothered waiting for the next poll.
 		
-Setup should now be complete, you can close Quantum by click the close window button (it will minimize to the system tray).
+Setup should now be complete, you can close Quantum by clicking the close window button (it will minimize to the system tray).
