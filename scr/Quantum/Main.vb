@@ -293,7 +293,7 @@ Public Class Main
             ' Update UI
             UpdateSelectButton()
             TestSaveButton.Enabled = True
-            UpdateButton.Text = "Force Port Update Now"
+            UpdateButton.Text = "Update Port Now"
             UpdateButton.Enabled = True
 
             ' Ensure timer is enabled
