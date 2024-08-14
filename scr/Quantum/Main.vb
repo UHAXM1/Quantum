@@ -458,8 +458,18 @@ Public Class Main
         End If
     End Sub
 
-    'Runs as prgoram startup
+    ' Runs as prgoram startup
     Private Sub Main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        If My.Settings.UpgradeRequired Then
+
+            ' Copy settings from previous version
+            My.Settings.Upgrade()
+            My.Settings.UpgradeRequired = False
+
+            My.Settings.Save()
+
+        End If
 
         ' Set the main form title with version number
         Me.Text = Me.Text & " - v" & My.Application.Info.Version.ToString
