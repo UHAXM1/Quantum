@@ -500,6 +500,11 @@ Public Class Main
             Me.WindowState = FormWindowState.Normal
             Me.Show()
 
+        Else
+
+            Me.WindowState = FormWindowState.Minimized
+            Me.Hide()
+
         End If
 
         ' If no log file can be found search the registry to find it

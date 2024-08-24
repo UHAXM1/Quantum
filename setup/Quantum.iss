@@ -2,13 +2,12 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Quantum"
-#define MyAppVersion "1.2.0.0"
+#define MyAppVersion "1.3.0.0"
 #define MyAppExeName "Quantum.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-SignTool=MsSign $f
 AppId={{2275862F-4ADC-4BC3-B43F-40A730EDC980}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}

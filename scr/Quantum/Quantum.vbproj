@@ -7,9 +7,9 @@
     <UseWindowsForms>true</UseWindowsForms>
     <MyType>WindowsForms</MyType>
     <ApplicationIcon>Q_32.ico</ApplicationIcon>
-	<AssemblyVersion>1.2.0.0</AssemblyVersion>
-	<FileVersion>1.2.0.0</FileVersion>
-	<Version>1.2.0.0</Version>
+	<AssemblyVersion>1.3.0.0</AssemblyVersion>
+	<FileVersion>1.3.0.0</FileVersion>
+	<Version>1.3.0.0</Version>
 	<Title>Quantum</Title>
 	<Authors>UHAX</Authors>
 	<PackageId>Quantum</PackageId>
