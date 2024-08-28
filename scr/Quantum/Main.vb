@@ -4,8 +4,14 @@ Imports QBittorrent.Client
 
 Public Class Main
 
+    ' Counter for the timer
+    Private TimerCount As Integer = 0
+
     ' Last valid port captured port from logs or qBittorrent
     Private LastValidPort As Integer = -1
+
+    ' UI Scaling adjustment
+    Private LogScalingSet As Boolean = False
 
     ' Test connection to qBittorrent
     Private Async Function CheckConnection() As Task
@@ -145,11 +151,8 @@ Public Class Main
             ' Port number
             HeaderItem.SubItems.Add(VPNLogFile.Columns.Item(1).Text)
 
-            ' Port length
-            HeaderItem.SubItems.Add(VPNLogFile.Columns.Item(2).Text)
-
             ' Valid
-            HeaderItem.SubItems.Add(VPNLogFile.Columns.Item(3).Text)
+            HeaderItem.SubItems.Add(VPNLogFile.Columns.Item(2).Text)
 
             VPNLogFile.Items.Add(HeaderItem)
 
@@ -207,36 +210,11 @@ Public Class Main
 
             End If
 
-            ' Get the log file directory from the filepath
-            Dim ArchivedPathDirectory As String = Path.GetDirectoryName(My.Settings.FilePath)
-
-            ' Get the oldest log file first, this is allways service-logs.1.txt if it exisits
-            Dim ArchivedFilePath As String = ArchivedPathDirectory & "\service-logs.1.txt"
-
-            ' If log exisits start to process
-            If File.Exists(ArchivedFilePath) Then
-
-                ' Read log
-                Dim ArchivedLogTempPort As Integer = ReadFile(ArchivedFilePath)
-
-                ' If valid port then update temp
-                If ArchivedLogTempPort >= 0 Then
-
-                    TempValidPort = ArchivedLogTempPort
-
-                Else
-
-                    ' No port data found
-
-                End If
-
-            End If
-
             ' Get the log file directory from the filepath, if it exisits process
             If File.Exists(My.Settings.FilePath) Then
 
                 ' Read log
-                Dim PrimaryLogTempPort As Integer = ReadFile(My.Settings.FilePath)
+                Dim PrimaryLogTempPort As Integer = ReadLogFile(My.Settings.FilePath)
 
                 ' If valid port then update temp
                 If PrimaryLogTempPort >= 0 Then
@@ -246,6 +224,31 @@ Public Class Main
                 Else
 
                     ' No port data found
+
+                    ' Get the log file directory from the filepath
+                    Dim ArchivedPathDirectory As String = Path.GetDirectoryName(My.Settings.FilePath)
+
+                    ' Get the oldest log file first, this is allways service-logs.1.txt if it exisits
+                    Dim ArchivedFilePath As String = ArchivedPathDirectory & "\service-logs.1.txt"
+
+                    ' If log exisits start to process
+                    If File.Exists(ArchivedFilePath) Then
+
+                        ' Read log
+                        Dim ArchivedLogTempPort As Integer = ReadLogFile(ArchivedFilePath)
+
+                        ' If valid port then update temp
+                        If ArchivedLogTempPort >= 0 Then
+
+                            TempValidPort = ArchivedLogTempPort
+
+                        Else
+
+                            ' No port data found
+
+                        End If
+
+                    End If
 
                 End If
 
@@ -284,6 +287,8 @@ Public Class Main
 
             End If
 
+            VPNLogFileLabel.Text = "ProtonVPN Log File Output (Parsed) " & DateTime.Now
+
         Catch ex As Exception
 
             LogOutput(ex.Message, True, True)
@@ -303,7 +308,7 @@ Public Class Main
 
     End Sub
 
-    Private Function ReadFile(ByVal pPath As String) As Integer
+    Private Function ReadLogFile(ByVal pPath As String) As Integer
 
         Try
 
@@ -315,14 +320,33 @@ Public Class Main
 
             Dim LogFileStreamReader As New StreamReader(LogFileSteam)
 
+            ' List to store the lines
+            Dim Lines As New List(Of String)()
+
             ' Read first line
             Dim Line As String = LogFileStreamReader.ReadLine
+
+            ' If we still have a valid line
+            While Line IsNot Nothing
+
+                ' Add the line to the array
+                Lines.Add(Line)
+
+                ' Read the next line
+                Line = LogFileStreamReader.ReadLine
+
+            End While
+
+            ' Close access to log file
+            LogFileStreamReader.Close()
+            LogFileSteam.Close()
 
             ' Setup list/array
             Dim Items As New List(Of ListViewItem)
 
-            ' If we still have a valid line
-            While Line IsNot Nothing
+            For i As Integer = Lines.Count - 1 To 0 Step -1
+
+                Line = (Lines(i))
 
                 ' Check for the string "Port pair", this is the primary flag
                 If Line.Contains("Port pair") Then
@@ -362,8 +386,8 @@ Public Class Main
                                 NewItem.SubItems.Add(PortString)
 
                                 ' Validate the port string
-                                Dim IsParsed As Boolean = False
                                 Dim CheckTempPort As Integer = -1
+                                Dim ValidPort As Boolean = False
 
                                 If Integer.TryParse(PortString, CheckTempPort) Then
 
@@ -376,8 +400,8 @@ Public Class Main
                                         If CheckTempPort <= 65535 Then
 
                                             'Port is valid
-                                            IsParsed = True
                                             TempPort = CheckTempPort
+                                            ValidPort = True
 
                                         End If
 
@@ -385,12 +409,18 @@ Public Class Main
 
                                 End If
 
-                                ' Add subitems
-                                NewItem.SubItems.Add(PortString.Count)
-                                NewItem.SubItems.Add(IsParsed)
+                                ' Set validport to subitem
+                                NewItem.SubItems.Add(ValidPort)
 
                                 ' Add to items
                                 Items.Add(NewItem)
+
+                                If ValidPort Then
+
+                                    ' We have a valid port, exit the loop
+                                    Exit For
+
+                                End If
 
                             End If
 
@@ -400,16 +430,10 @@ Public Class Main
 
                 End If
 
-                Line = LogFileStreamReader.ReadLine
-
-            End While
+            Next
 
             ' Add items to listview
             VPNLogFile.Items.AddRange(Items.ToArray)
-
-            ' Close access to log file
-            LogFileStreamReader.Close()
-            LogFileSteam.Close()
 
             ' Return the port number
             Return TempPort
@@ -425,8 +449,21 @@ Public Class Main
 
     Private Sub MainTimer_Tick(sender As Object, e As EventArgs) Handles MainTimer.Tick
 
-        ' Process task
-        Dim DoTask As Task = CheckConnection()
+        ' Increment the counter
+        TimerCount = TimerCount + 1
+
+        If TimerCount >= 60 Then
+
+            ' Process task
+            Dim DoTask As Task = CheckConnection()
+
+            ' Reset the counter
+            TimerCount = 0
+
+        End If
+
+        ' Update the progressbar
+        MainProgressBar.Value = TimerCount
 
     End Sub
 
@@ -458,24 +495,33 @@ Public Class Main
         End If
     End Sub
 
-    ' Runs as prgoram startup
+
+    ' Runs at program startup
     Private Sub Main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        If My.Settings.UpgradeRequired Then
+        Try
 
-            ' Copy settings from previous version
-            My.Settings.Upgrade()
-            My.Settings.UpgradeRequired = False
+            If My.Settings.UpgradeRequired Then
 
-            My.Settings.Save()
+                ' Copy settings from previous version
+                My.Settings.Upgrade()
+                My.Settings.UpgradeRequired = False
 
-        End If
+                My.Settings.Save()
+
+            End If
+
+        Catch ex As Exception
+
+            MessageBox.Show(ex.Message)
+
+        End Try
 
         ' Set the main form title with version number
         Me.Text = Me.Text & " - v" & My.Application.Info.Version.ToString
 
         ' Set the main form size
-        Me.Size = New Size(400, 356)
+        Me.Size = New Size(410, 390)
 
         ' Make sure the first tab is selected
         MainTabControl.SelectedIndex = 0
@@ -487,7 +533,7 @@ Public Class Main
         If My.Settings.FirstRun = True Then
 
             ' Show program disclaimer
-            MessageBox.Show(AboutLabelProtonVPN.Text, "Disclaimer!")
+            MessageBox.Show(AboutLabelLinkProtonVPN.Text, "Disclaimer!")
 
             ' Update settings so this message is not shown again
             My.Settings.FirstRun = False
@@ -502,8 +548,7 @@ Public Class Main
 
         Else
 
-            Me.WindowState = FormWindowState.Minimized
-            Me.Hide()
+            Me.Close()
 
         End If
 
@@ -594,6 +639,7 @@ Public Class Main
 
     End Sub
 
+    ' Sets the label for the LogFile button
     Private Sub UpdateSelectButton()
 
         If File.Exists(My.Settings.FilePath) Then
@@ -838,6 +884,7 @@ Public Class Main
             ' Cancel closing the applcation and minimize to tray
             e.Cancel = True
             Me.WindowState = FormWindowState.Minimized
+            Me.Hide()
 
         End If
 
@@ -850,8 +897,7 @@ Public Class Main
         If Me.WindowState = FormWindowState.Normal Then
 
             ' Hide to system tray
-            Me.Hide()
-            Me.WindowState = FormWindowState.Minimized
+            Me.Close()
 
         Else
 
@@ -864,10 +910,16 @@ Public Class Main
 
     End Sub
 
-    ' User clicked Update button
+    ' User clicked 'Update Port Now' button
     Private Sub UpdateButton_Click(sender As Object, e As EventArgs) Handles UpdateButton.Click
 
         Try
+
+            ' Reset the counter
+            TimerCount = 0
+
+            ' Reset the progressbar
+            MainProgressBar.Value = 0
 
             ' Call task to test connection, this allways checks for an updated port
             Dim DoTask As Task = CheckConnection()
@@ -1010,9 +1062,6 @@ Public Class Main
 
     End Sub
 
-    ' UI Scaling adjustment
-    Private LogScalingSet As Boolean = False
-
     ' Runs when the form is visiable, adjusts columns for better fit
     Private Sub Main_VisibleChanged(sender As Object, e As EventArgs) Handles Me.VisibleChanged
 
@@ -1035,7 +1084,7 @@ Public Class Main
                 QLogFile.Items.RemoveAt(0)
 
                 ' Adjust for scrollbar
-                QEvent.Width = QLogFile.ClientSize.Width - QDateTime.Width - SystemInformation.VerticalScrollBarWidth - 2
+                QEvent.Width = (QLogFile.ClientSize.Width - QDateTime.Width - SystemInformation.VerticalScrollBarWidth) - 7
 
                 ' Completed, doesnt need to be done again
                 LogScalingSet = True
@@ -1044,17 +1093,40 @@ Public Class Main
 
         End If
 
+        If Me.Visible = True Then
+
+            'Change the label to 'Hide'
+            ShowHideToolStripMenuItem.Text = "Hide"
+
+        Else
+
+            'Change the label to 'Show'
+            ShowHideToolStripMenuItem.Text = "Show"
+
+        End If
+
     End Sub
 
-    Private Sub ShowToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ShowToolStripMenuItem.Click
+    ' User clicks hide/show in the system tray
+    Private Sub ShowHideToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ShowHideToolStripMenuItem.Click
 
-        ' Popup on desktop
-        Me.Show()
-        Me.WindowState = FormWindowState.Normal
-        Me.BringToFront()
+        If Me.Visible = True Then
+
+            ' Close the window
+            Me.Close()
+
+        Else
+
+            ' Popup on desktop
+            Me.Show()
+            Me.WindowState = FormWindowState.Normal
+            Me.BringToFront()
+
+        End If
 
     End Sub
 
+    ' User clicks 'Update Port Now' in the system tray
     Private Sub UpdateNowToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UpdateNowToolStripMenuItem.Click
 
         Try
@@ -1071,4 +1143,27 @@ Public Class Main
         End Try
 
     End Sub
+
+    ' Opens the default webbrowser to the Quantum GitHub page
+    Private Sub AboutLinkLabel_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles AboutLinkLabel.LinkClicked
+
+        ' Define URL
+        Dim GitURL As String = "https://github.com/UHAXM1/Quantum"
+
+        ' Launch the webbrowser
+        Process.Start(New ProcessStartInfo(GitURL) With {.UseShellExecute = True})
+
+    End Sub
+
+    ' Opens the default webbrowser to the Proton homepage
+    Private Sub AboutLabelLinkProtonVPN_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles AboutLabelLinkProtonVPN.LinkClicked
+
+        ' Define URL
+        Dim ProtonURL As String = "https://proton.me/"
+
+        ' Launch the webbrowser
+        Process.Start(New ProcessStartInfo(ProtonURL) With {.UseShellExecute = True})
+
+    End Sub
+
 End Class

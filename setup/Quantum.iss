@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Quantum"
-#define MyAppVersion "1.3.0.0"
+#define MyAppVersion "1.4.0.0"
 #define MyAppExeName "Quantum.exe"
 
 [Setup]

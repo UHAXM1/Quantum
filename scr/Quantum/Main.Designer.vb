@@ -29,7 +29,6 @@ Partial Class Main
         VPNLogFile = New ListView()
         VPNDateTime = New ColumnHeader()
         VPNPort = New ColumnHeader()
-        VPNPortLength = New ColumnHeader()
         VPNValid = New ColumnHeader()
         HostTextBoxLabel = New TextBox()
         HostTextBox = New TextBox()
@@ -57,12 +56,15 @@ Partial Class Main
         TabPageAbout = New TabPage()
         AboutTableLayoutPanel = New TableLayoutPanel()
         AboutPictureBox = New PictureBox()
-        AuthorLabel = New Label()
-        AboutLabelProtonVPN = New Label()
+        AboutLinkLabel = New LinkLabel()
+        AboutLabelLinkProtonVPN = New LinkLabel()
         TrayContextMenuStrip = New ContextMenuStrip(components)
-        ShowToolStripMenuItem = New ToolStripMenuItem()
+        ShowHideToolStripMenuItem = New ToolStripMenuItem()
         UpdateNowToolStripMenuItem = New ToolStripMenuItem()
         ExitToolStripMenuItem = New ToolStripMenuItem()
+        MainTableLayoutPanel = New TableLayoutPanel()
+        MainProgressBar = New ProgressBar()
+        MainToolTip = New ToolTip(components)
         SettingsTableLayoutPanel.SuspendLayout()
         StatusStrip.SuspendLayout()
         MainTabControl.SuspendLayout()
@@ -73,26 +75,29 @@ Partial Class Main
         AboutTableLayoutPanel.SuspendLayout()
         CType(AboutPictureBox, ComponentModel.ISupportInitialize).BeginInit()
         TrayContextMenuStrip.SuspendLayout()
+        MainTableLayoutPanel.SuspendLayout()
         SuspendLayout()
         ' 
         ' TestSaveButton
         ' 
         SettingsTableLayoutPanel.SetColumnSpan(TestSaveButton, 2)
         TestSaveButton.Dock = DockStyle.Fill
-        TestSaveButton.Location = New Point(3, 167)
+        TestSaveButton.Location = New Point(3, 172)
         TestSaveButton.Name = "TestSaveButton"
-        TestSaveButton.Size = New Size(360, 40)
+        TestSaveButton.Size = New Size(364, 40)
         TestSaveButton.TabIndex = 6
         TestSaveButton.Text = "Test/Save Settings"
+        MainToolTip.SetToolTip(TestSaveButton, "Test the qBittorrent settings above, if it connects the settings will be saved")
         TestSaveButton.UseVisualStyleBackColor = True
         ' 
         ' MainTimer
         ' 
-        MainTimer.Interval = 60000
+        MainTimer.Interval = 1000
         ' 
         ' VPNLogFile
         ' 
-        VPNLogFile.Columns.AddRange(New ColumnHeader() {VPNDateTime, VPNPort, VPNPortLength, VPNValid})
+        VPNLogFile.BorderStyle = BorderStyle.FixedSingle
+        VPNLogFile.Columns.AddRange(New ColumnHeader() {VPNDateTime, VPNPort, VPNValid})
         LogsTableLayoutPanel.SetColumnSpan(VPNLogFile, 2)
         VPNLogFile.Dock = DockStyle.Fill
         VPNLogFile.FullRowSelect = True
@@ -101,8 +106,9 @@ Partial Class Main
         VPNLogFile.Location = New Point(3, 26)
         VPNLogFile.MultiSelect = False
         VPNLogFile.Name = "VPNLogFile"
-        VPNLogFile.Size = New Size(360, 99)
+        VPNLogFile.Size = New Size(364, 102)
         VPNLogFile.TabIndex = 1
+        MainToolTip.SetToolTip(VPNLogFile, "Double click to see the unparsed log entry")
         VPNLogFile.UseCompatibleStateImageBehavior = False
         VPNLogFile.View = View.Details
         ' 
@@ -116,15 +122,9 @@ Partial Class Main
         VPNPort.Text = "Port Number"
         VPNPort.Width = 100
         ' 
-        ' VPNPortLength
-        ' 
-        VPNPortLength.Text = "Port Length"
-        VPNPortLength.Width = 100
-        ' 
         ' VPNValid
         ' 
         VPNValid.Text = "Valid"
-        VPNValid.Width = 37
         ' 
         ' HostTextBoxLabel
         ' 
@@ -142,8 +142,9 @@ Partial Class Main
         HostTextBox.Dock = DockStyle.Fill
         HostTextBox.Location = New Point(73, 98)
         HostTextBox.Name = "HostTextBox"
-        HostTextBox.Size = New Size(290, 23)
+        HostTextBox.Size = New Size(294, 23)
         HostTextBox.TabIndex = 3
+        MainToolTip.SetToolTip(HostTextBox, "Enter the qBittorrent WebUI host information")
         ' 
         ' qBittorrentLabel
         ' 
@@ -152,9 +153,9 @@ Partial Class Main
         qBittorrentLabel.Dock = DockStyle.Fill
         qBittorrentLabel.Location = New Point(3, 72)
         qBittorrentLabel.Name = "qBittorrentLabel"
-        qBittorrentLabel.Size = New Size(360, 23)
+        qBittorrentLabel.Size = New Size(364, 23)
         qBittorrentLabel.TabIndex = 5
-        qBittorrentLabel.Text = "qBittorrent Configuration"
+        qBittorrentLabel.Text = "qBittorrent WebUI Configuration"
         qBittorrentLabel.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' UsernameTextBoxLabel
@@ -184,16 +185,18 @@ Partial Class Main
         UsernameTextBox.Dock = DockStyle.Fill
         UsernameTextBox.Location = New Point(73, 121)
         UsernameTextBox.Name = "UsernameTextBox"
-        UsernameTextBox.Size = New Size(290, 23)
+        UsernameTextBox.Size = New Size(294, 23)
         UsernameTextBox.TabIndex = 4
+        MainToolTip.SetToolTip(UsernameTextBox, "Enter the qBittorrent WebUI username")
         ' 
         ' PasswordTextBox
         ' 
         PasswordTextBox.Dock = DockStyle.Fill
         PasswordTextBox.Location = New Point(73, 144)
         PasswordTextBox.Name = "PasswordTextBox"
-        PasswordTextBox.Size = New Size(290, 23)
+        PasswordTextBox.Size = New Size(294, 23)
         PasswordTextBox.TabIndex = 5
+        MainToolTip.SetToolTip(PasswordTextBox, "Enter the qBittorrent WebUI password")
         PasswordTextBox.UseSystemPasswordChar = True
         ' 
         ' SettingsTableLayoutPanel
@@ -201,7 +204,7 @@ Partial Class Main
         SettingsTableLayoutPanel.ColumnCount = 2
         SettingsTableLayoutPanel.ColumnStyles.Add(New ColumnStyle(SizeType.Absolute, 70F))
         SettingsTableLayoutPanel.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 100F))
-        SettingsTableLayoutPanel.Controls.Add(TestSaveButton, 0, 6)
+        SettingsTableLayoutPanel.Controls.Add(TestSaveButton, 0, 7)
         SettingsTableLayoutPanel.Controls.Add(qBittorrentLabel, 0, 2)
         SettingsTableLayoutPanel.Controls.Add(HostTextBox, 1, 3)
         SettingsTableLayoutPanel.Controls.Add(PasswordTextBox, 1, 5)
@@ -210,23 +213,23 @@ Partial Class Main
         SettingsTableLayoutPanel.Controls.Add(UsernameTextBox, 1, 4)
         SettingsTableLayoutPanel.Controls.Add(HostTextBoxLabel, 0, 3)
         SettingsTableLayoutPanel.Controls.Add(LogFileSelectButton, 0, 1)
-        SettingsTableLayoutPanel.Controls.Add(UpdateButton, 0, 7)
+        SettingsTableLayoutPanel.Controls.Add(UpdateButton, 0, 8)
         SettingsTableLayoutPanel.Controls.Add(StartUpCheckBox, 0, 0)
         SettingsTableLayoutPanel.Dock = DockStyle.Fill
         SettingsTableLayoutPanel.Location = New Point(3, 3)
         SettingsTableLayoutPanel.Name = "SettingsTableLayoutPanel"
-        SettingsTableLayoutPanel.RowCount = 9
+        SettingsTableLayoutPanel.RowCount = 10
         SettingsTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, 26F))
         SettingsTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, 46F))
         SettingsTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, 23F))
         SettingsTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, 23F))
         SettingsTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, 23F))
         SettingsTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, 23F))
+        SettingsTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, 5F))
         SettingsTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, 46F))
         SettingsTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, 46F))
         SettingsTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Percent, 100F))
-        SettingsTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, 20F))
-        SettingsTableLayoutPanel.Size = New Size(366, 257)
+        SettingsTableLayoutPanel.Size = New Size(370, 262)
         SettingsTableLayoutPanel.TabIndex = 5
         ' 
         ' LogFileSelectButton
@@ -235,20 +238,22 @@ Partial Class Main
         LogFileSelectButton.Dock = DockStyle.Fill
         LogFileSelectButton.Location = New Point(3, 29)
         LogFileSelectButton.Name = "LogFileSelectButton"
-        LogFileSelectButton.Size = New Size(360, 40)
+        LogFileSelectButton.Size = New Size(364, 40)
         LogFileSelectButton.TabIndex = 2
         LogFileSelectButton.Text = "Select ProtonVPN Log File   (...)"
+        MainToolTip.SetToolTip(LogFileSelectButton, "Manually select the ProtonVPN log file")
         LogFileSelectButton.UseVisualStyleBackColor = True
         ' 
         ' UpdateButton
         ' 
         SettingsTableLayoutPanel.SetColumnSpan(UpdateButton, 2)
         UpdateButton.Dock = DockStyle.Fill
-        UpdateButton.Location = New Point(3, 213)
+        UpdateButton.Location = New Point(3, 218)
         UpdateButton.Name = "UpdateButton"
-        UpdateButton.Size = New Size(360, 40)
+        UpdateButton.Size = New Size(364, 40)
         UpdateButton.TabIndex = 7
         UpdateButton.Text = "Update Port Now"
+        MainToolTip.SetToolTip(UpdateButton, "Force Quantum to check the log files and update the port information")
         UpdateButton.UseVisualStyleBackColor = True
         ' 
         ' StartUpCheckBox
@@ -258,10 +263,11 @@ Partial Class Main
         StartUpCheckBox.Dock = DockStyle.Fill
         StartUpCheckBox.Location = New Point(3, 3)
         StartUpCheckBox.Name = "StartUpCheckBox"
-        StartUpCheckBox.Size = New Size(360, 20)
+        StartUpCheckBox.Size = New Size(364, 20)
         StartUpCheckBox.TabIndex = 1
         StartUpCheckBox.Text = "Launch Quantum at Startup"
         StartUpCheckBox.TextAlign = ContentAlignment.MiddleCenter
+        MainToolTip.SetToolTip(StartUpCheckBox, "Enable/Disable running Quantum at startup")
         StartUpCheckBox.UseVisualStyleBackColor = True
         ' 
         ' VPNLogFileLabel
@@ -271,7 +277,7 @@ Partial Class Main
         VPNLogFileLabel.Dock = DockStyle.Fill
         VPNLogFileLabel.Location = New Point(3, 0)
         VPNLogFileLabel.Name = "VPNLogFileLabel"
-        VPNLogFileLabel.Size = New Size(360, 23)
+        VPNLogFileLabel.Size = New Size(364, 23)
         VPNLogFileLabel.TabIndex = 3
         VPNLogFileLabel.Text = "ProtonVPN Log File Output (Parsed)"
         VPNLogFileLabel.TextAlign = ContentAlignment.MiddleCenter
@@ -279,9 +285,9 @@ Partial Class Main
         ' StatusStrip
         ' 
         StatusStrip.Items.AddRange(New ToolStripItem() {ToolStripStatusLabel})
-        StatusStrip.Location = New Point(0, 291)
+        StatusStrip.Location = New Point(0, 325)
         StatusStrip.Name = "StatusStrip"
-        StatusStrip.Size = New Size(380, 22)
+        StatusStrip.Size = New Size(390, 22)
         StatusStrip.SizingGrip = False
         StatusStrip.TabIndex = 4
         StatusStrip.Text = "StatusStrip1"
@@ -290,7 +296,7 @@ Partial Class Main
         ' 
         ToolStripStatusLabel.AutoToolTip = True
         ToolStripStatusLabel.Name = "ToolStripStatusLabel"
-        ToolStripStatusLabel.Size = New Size(365, 17)
+        ToolStripStatusLabel.Size = New Size(375, 17)
         ToolStripStatusLabel.Spring = True
         ' 
         ' NotifyIcon
@@ -306,10 +312,10 @@ Partial Class Main
         MainTabControl.Controls.Add(TabPageLogs)
         MainTabControl.Controls.Add(TabPageAbout)
         MainTabControl.Dock = DockStyle.Fill
-        MainTabControl.Location = New Point(0, 0)
+        MainTabControl.Location = New Point(3, 3)
         MainTabControl.Name = "MainTabControl"
         MainTabControl.SelectedIndex = 0
-        MainTabControl.Size = New Size(380, 291)
+        MainTabControl.Size = New Size(384, 296)
         MainTabControl.TabIndex = 8
         ' 
         ' TabPageSettings
@@ -318,7 +324,7 @@ Partial Class Main
         TabPageSettings.Location = New Point(4, 4)
         TabPageSettings.Name = "TabPageSettings"
         TabPageSettings.Padding = New Padding(3)
-        TabPageSettings.Size = New Size(372, 263)
+        TabPageSettings.Size = New Size(376, 268)
         TabPageSettings.TabIndex = 0
         TabPageSettings.Text = "Settings"
         TabPageSettings.UseVisualStyleBackColor = True
@@ -329,7 +335,7 @@ Partial Class Main
         TabPageLogs.Location = New Point(4, 4)
         TabPageLogs.Name = "TabPageLogs"
         TabPageLogs.Padding = New Padding(3)
-        TabPageLogs.Size = New Size(372, 263)
+        TabPageLogs.Size = New Size(376, 268)
         TabPageLogs.TabIndex = 1
         TabPageLogs.Text = "Logs"
         TabPageLogs.UseVisualStyleBackColor = True
@@ -351,22 +357,24 @@ Partial Class Main
         LogsTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Percent, 50F))
         LogsTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, 23F))
         LogsTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Percent, 50F))
-        LogsTableLayoutPanel.Size = New Size(366, 257)
+        LogsTableLayoutPanel.Size = New Size(370, 262)
         LogsTableLayoutPanel.TabIndex = 0
         ' 
         ' QLogFile
         ' 
+        QLogFile.BorderStyle = BorderStyle.FixedSingle
         QLogFile.Columns.AddRange(New ColumnHeader() {QDateTime, QEvent})
         LogsTableLayoutPanel.SetColumnSpan(QLogFile, 2)
         QLogFile.Dock = DockStyle.Fill
         QLogFile.FullRowSelect = True
         QLogFile.GridLines = True
         QLogFile.HeaderStyle = ColumnHeaderStyle.Nonclickable
-        QLogFile.Location = New Point(3, 154)
+        QLogFile.Location = New Point(3, 157)
         QLogFile.MultiSelect = False
         QLogFile.Name = "QLogFile"
-        QLogFile.Size = New Size(360, 100)
+        QLogFile.Size = New Size(364, 102)
         QLogFile.TabIndex = 2
+        MainToolTip.SetToolTip(QLogFile, "Double click to see the event")
         QLogFile.UseCompatibleStateImageBehavior = False
         QLogFile.View = View.Details
         ' 
@@ -385,9 +393,9 @@ Partial Class Main
         QLogLabel.AutoSize = True
         LogsTableLayoutPanel.SetColumnSpan(QLogLabel, 2)
         QLogLabel.Dock = DockStyle.Fill
-        QLogLabel.Location = New Point(3, 128)
+        QLogLabel.Location = New Point(3, 131)
         QLogLabel.Name = "QLogLabel"
-        QLogLabel.Size = New Size(360, 23)
+        QLogLabel.Size = New Size(364, 23)
         QLogLabel.TabIndex = 6
         QLogLabel.Text = "Quantum Log Output"
         QLogLabel.TextAlign = ContentAlignment.MiddleCenter
@@ -397,7 +405,7 @@ Partial Class Main
         TabPageAbout.Controls.Add(AboutTableLayoutPanel)
         TabPageAbout.Location = New Point(4, 4)
         TabPageAbout.Name = "TabPageAbout"
-        TabPageAbout.Size = New Size(372, 263)
+        TabPageAbout.Size = New Size(376, 268)
         TabPageAbout.TabIndex = 2
         TabPageAbout.Text = "About"
         TabPageAbout.UseVisualStyleBackColor = True
@@ -409,8 +417,8 @@ Partial Class Main
         AboutTableLayoutPanel.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 62.4976578F))
         AboutTableLayoutPanel.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 18.7511711F))
         AboutTableLayoutPanel.Controls.Add(AboutPictureBox, 1, 1)
-        AboutTableLayoutPanel.Controls.Add(AuthorLabel, 1, 0)
-        AboutTableLayoutPanel.Controls.Add(AboutLabelProtonVPN, 0, 2)
+        AboutTableLayoutPanel.Controls.Add(AboutLinkLabel, 1, 0)
+        AboutTableLayoutPanel.Controls.Add(AboutLabelLinkProtonVPN, 1, 2)
         AboutTableLayoutPanel.Dock = DockStyle.Fill
         AboutTableLayoutPanel.Location = New Point(0, 0)
         AboutTableLayoutPanel.Name = "AboutTableLayoutPanel"
@@ -418,55 +426,60 @@ Partial Class Main
         AboutTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Percent, 18.75F))
         AboutTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Percent, 62.5F))
         AboutTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Percent, 18.75F))
-        AboutTableLayoutPanel.Size = New Size(372, 263)
+        AboutTableLayoutPanel.Size = New Size(376, 268)
         AboutTableLayoutPanel.TabIndex = 0
         ' 
         ' AboutPictureBox
         ' 
-        AboutPictureBox.BackColor = Color.Black
+        AboutPictureBox.BackColor = Color.Transparent
         AboutPictureBox.Dock = DockStyle.Fill
-        AboutPictureBox.Image = My.Resources.Resources.UHAX
-        AboutPictureBox.Location = New Point(72, 52)
+        AboutPictureBox.Image = CType(resources.GetObject("AboutPictureBox.Image"), Image)
+        AboutPictureBox.Location = New Point(73, 53)
         AboutPictureBox.Name = "AboutPictureBox"
-        AboutPictureBox.Size = New Size(226, 158)
+        AboutPictureBox.Size = New Size(228, 161)
         AboutPictureBox.SizeMode = PictureBoxSizeMode.Zoom
         AboutPictureBox.TabIndex = 0
         AboutPictureBox.TabStop = False
         ' 
-        ' AuthorLabel
+        ' AboutLinkLabel
         ' 
-        AuthorLabel.AutoSize = True
-        AuthorLabel.Dock = DockStyle.Fill
-        AuthorLabel.Location = New Point(72, 0)
-        AuthorLabel.Name = "AuthorLabel"
-        AuthorLabel.Size = New Size(226, 49)
-        AuthorLabel.TabIndex = 1
-        AuthorLabel.Text = "By UHAX"
-        AuthorLabel.TextAlign = ContentAlignment.MiddleCenter
+        AboutLinkLabel.AutoSize = True
+        AboutLinkLabel.Dock = DockStyle.Fill
+        AboutLinkLabel.LinkArea = New LinkArea(8, 41)
+        AboutLinkLabel.Location = New Point(73, 0)
+        AboutLinkLabel.Name = "AboutLinkLabel"
+        AboutLinkLabel.Size = New Size(228, 50)
+        AboutLinkLabel.TabIndex = 3
+        AboutLinkLabel.TabStop = True
+        AboutLinkLabel.Text = "By UHAX https://github.com/UHAXM1/Quantum"
+        AboutLinkLabel.TextAlign = ContentAlignment.MiddleCenter
+        AboutLinkLabel.UseCompatibleTextRendering = True
         ' 
-        ' AboutLabelProtonVPN
+        ' AboutLabelLinkProtonVPN
         ' 
-        AboutLabelProtonVPN.AutoSize = True
-        AboutTableLayoutPanel.SetColumnSpan(AboutLabelProtonVPN, 3)
-        AboutLabelProtonVPN.Dock = DockStyle.Fill
-        AboutLabelProtonVPN.Location = New Point(3, 213)
-        AboutLabelProtonVPN.Name = "AboutLabelProtonVPN"
-        AboutLabelProtonVPN.Size = New Size(366, 50)
-        AboutLabelProtonVPN.TabIndex = 2
-        AboutLabelProtonVPN.Text = "This app is not affiliated in any way with Proton AG (https://proton.me/), use at your own risk."
-        AboutLabelProtonVPN.TextAlign = ContentAlignment.MiddleCenter
+        AboutLabelLinkProtonVPN.AutoSize = True
+        AboutLabelLinkProtonVPN.Dock = DockStyle.Fill
+        AboutLabelLinkProtonVPN.LinkArea = New LinkArea(54, 18)
+        AboutLabelLinkProtonVPN.Location = New Point(73, 217)
+        AboutLabelLinkProtonVPN.Name = "AboutLabelLinkProtonVPN"
+        AboutLabelLinkProtonVPN.Size = New Size(228, 51)
+        AboutLabelLinkProtonVPN.TabIndex = 4
+        AboutLabelLinkProtonVPN.TabStop = True
+        AboutLabelLinkProtonVPN.Text = "This app is not affiliated in any way with Proton AG (https://proton.me/), use at your own risk."
+        AboutLabelLinkProtonVPN.TextAlign = ContentAlignment.MiddleCenter
+        AboutLabelLinkProtonVPN.UseCompatibleTextRendering = True
         ' 
         ' TrayContextMenuStrip
         ' 
-        TrayContextMenuStrip.Items.AddRange(New ToolStripItem() {ShowToolStripMenuItem, UpdateNowToolStripMenuItem, ExitToolStripMenuItem})
+        TrayContextMenuStrip.Items.AddRange(New ToolStripItem() {ShowHideToolStripMenuItem, UpdateNowToolStripMenuItem, ExitToolStripMenuItem})
         TrayContextMenuStrip.Name = "ContextMenuStrip"
         TrayContextMenuStrip.Size = New Size(166, 70)
         ' 
-        ' ShowToolStripMenuItem
+        ' ShowHideToolStripMenuItem
         ' 
-        ShowToolStripMenuItem.Name = "ShowToolStripMenuItem"
-        ShowToolStripMenuItem.Size = New Size(165, 22)
-        ShowToolStripMenuItem.Text = "Show"
+        ShowHideToolStripMenuItem.Name = "ShowHideToolStripMenuItem"
+        ShowHideToolStripMenuItem.Size = New Size(165, 22)
+        ShowHideToolStripMenuItem.Text = "Show/Hide"
         ' 
         ' UpdateNowToolStripMenuItem
         ' 
@@ -480,12 +493,38 @@ Partial Class Main
         ExitToolStripMenuItem.Size = New Size(165, 22)
         ExitToolStripMenuItem.Text = "Exit"
         ' 
+        ' MainTableLayoutPanel
+        ' 
+        MainTableLayoutPanel.ColumnCount = 1
+        MainTableLayoutPanel.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 100F))
+        MainTableLayoutPanel.Controls.Add(MainTabControl, 0, 0)
+        MainTableLayoutPanel.Controls.Add(MainProgressBar, 0, 1)
+        MainTableLayoutPanel.Dock = DockStyle.Fill
+        MainTableLayoutPanel.Location = New Point(0, 0)
+        MainTableLayoutPanel.Name = "MainTableLayoutPanel"
+        MainTableLayoutPanel.RowCount = 2
+        MainTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Percent, 100F))
+        MainTableLayoutPanel.RowStyles.Add(New RowStyle(SizeType.Absolute, 23F))
+        MainTableLayoutPanel.Size = New Size(390, 325)
+        MainTableLayoutPanel.TabIndex = 9
+        ' 
+        ' MainProgressBar
+        ' 
+        MainProgressBar.Dock = DockStyle.Fill
+        MainProgressBar.Location = New Point(3, 305)
+        MainProgressBar.Maximum = 60
+        MainProgressBar.Name = "MainProgressBar"
+        MainProgressBar.Size = New Size(384, 17)
+        MainProgressBar.Step = 1
+        MainProgressBar.TabIndex = 9
+        MainToolTip.SetToolTip(MainProgressBar, "Show hows long until the log files are checked for any changes")
+        ' 
         ' Main
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(380, 313)
-        Controls.Add(MainTabControl)
+        ClientSize = New Size(390, 347)
+        Controls.Add(MainTableLayoutPanel)
         Controls.Add(StatusStrip)
         FormBorderStyle = FormBorderStyle.Fixed3D
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
@@ -510,6 +549,7 @@ Partial Class Main
         AboutTableLayoutPanel.PerformLayout()
         CType(AboutPictureBox, ComponentModel.ISupportInitialize).EndInit()
         TrayContextMenuStrip.ResumeLayout(False)
+        MainTableLayoutPanel.ResumeLayout(False)
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -519,7 +559,6 @@ Partial Class Main
     Friend WithEvents VPNLogFile As ListView
     Friend WithEvents VPNDateTime As ColumnHeader
     Friend WithEvents VPNPort As ColumnHeader
-    Friend WithEvents VPNPortLength As ColumnHeader
     Friend WithEvents StatusStrip As StatusStrip
     Friend WithEvents ToolStripStatusLabel As ToolStripStatusLabel
     Friend WithEvents HostTextBox As TextBox
@@ -533,7 +572,6 @@ Partial Class Main
     Friend WithEvents PasswordTextBox As TextBox
     Friend WithEvents LogFileSelectButton As Button
     Friend WithEvents NotifyIcon As NotifyIcon
-    Friend WithEvents VPNValid As ColumnHeader
     Friend WithEvents UpdateButton As Button
     Friend WithEvents MainTabControl As TabControl
     Friend WithEvents TabPageSettings As TabPage
@@ -546,12 +584,16 @@ Partial Class Main
     Friend WithEvents TabPageAbout As TabPage
     Friend WithEvents AboutTableLayoutPanel As TableLayoutPanel
     Friend WithEvents AboutPictureBox As PictureBox
-    Friend WithEvents AuthorLabel As Label
-    Friend WithEvents AboutLabelProtonVPN As Label
     Friend WithEvents StartUpCheckBox As CheckBox
     Friend WithEvents TrayContextMenuStrip As ContextMenuStrip
     Friend WithEvents ExitToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents ShowToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ShowHideToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents UpdateNowToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents MainTableLayoutPanel As TableLayoutPanel
+    Friend WithEvents MainProgressBar As ProgressBar
+    Friend WithEvents AboutLinkLabel As LinkLabel
+    Friend WithEvents AboutLabelLinkProtonVPN As LinkLabel
+    Friend WithEvents MainToolTip As ToolTip
+    Friend WithEvents VPNValid As ColumnHeader
 
 End Class

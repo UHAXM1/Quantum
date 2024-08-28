@@ -5,7 +5,7 @@ This application will monitor the Windows ProtonVPN client log files for port ch
 Uses the qBittorrent-net-client library found here
 https://github.com/fedarovich/qbittorrent-net-client
 
-Tested with ProtonVPN versions 3.2.12 and 3.3.0
+Tested with ProtonVPN version 3.3.2
 
 Requires .Net 8
 
