@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports Microsoft.Win32
 Imports QBittorrent.Client
+Imports GitHubUpdate
 
 Public Class Main
 
@@ -13,13 +14,22 @@ Public Class Main
     ' UI Scaling adjustment
     Private LogScalingSet As Boolean = False
 
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+
+    End Sub
+
     ' Test connection to qBittorrent
     Private Async Function CheckConnection() As Task
 
         Try
 
             ' Clear the log display
-            VPNLogFile.Items.Clear()
+            LV_VPNLogFile.Items.Clear()
 
             ' Open a new connection to qBittorrnet
             Dim Client = New QBittorrentClient(New Uri(My.Settings.Host))
@@ -44,7 +54,7 @@ Public Class Main
         Finally
 
             ' Ensure timer is enabled
-            MainTimer.Enabled = True
+            TMR_Main.Enabled = True
 
         End Try
 
@@ -56,10 +66,10 @@ Public Class Main
         Try
 
             ' Open a new connection to qBittorrnet
-            Dim Client = New QBittorrentClient(New Uri(HostTextBox.Text))
+            Dim Client = New QBittorrentClient(New Uri(TXT_Host.Text))
 
             ' Pass user/pass if needed
-            Await Client.LoginAsync(UsernameTextBox.Text, PasswordTextBox.Text)
+            Await Client.LoginAsync(TXT_Username.Text, TXT_Password.Text)
 
             ' Get current preferences
             Dim Prefs = New Preferences()
@@ -69,9 +79,9 @@ Public Class Main
             LastValidPort = Prefs.ListenPort
 
             ' If connection doesnt throw an exception then the configuration if good, save settings
-            My.Settings.Host = HostTextBox.Text
-            My.Settings.Username = UsernameTextBox.Text
-            My.Settings.Password = PasswordTextBox.Text
+            My.Settings.Host = TXT_Host.Text
+            My.Settings.Username = TXT_Username.Text
+            My.Settings.Password = TXT_Password.Text
             My.Settings.Save()
 
             LogOutput("Connected to qBittorrent, settings saved!", True, False)
@@ -130,83 +140,47 @@ Public Class Main
 
         Try
 
+            ' Disable the test/save/update button
+            BTN_TestSaveUpdate.Enabled = False
+
             ' Ensure timer is disabled
-            MainTimer.Enabled = False
+            TMR_Main.Enabled = False
+
+            ' Reset the counter
+            TimerCount = 0
+
+            ' Reset the progressbar
+            PRG_Main.Value = 0
 
             ' Update UI
-            TestSaveButton.Enabled = False
-            UpdateButton.Text = "Reading log file..."
-            UpdateButton.Enabled = False
+            BTN_TestSaveUpdate.Enabled = False
+            BTN_TestSaveUpdate.Text = "Reading log file..."
 
             LogOutput("Reading log file...", False, False)
 
             ' Clear all exisitng log entries
-            VPNLogFile.Items.Clear()
+            LV_VPNLogFile.Items.Clear()
 
             ' Add dummy entries for column sizing
 
             ' Date/Time
-            Dim HeaderItem As New ListViewItem(VPNLogFile.Columns.Item(0).Text)
+            Dim HeaderItem As New ListViewItem(LV_VPNLogFile.Columns.Item(0).Text)
 
             ' Port number
-            HeaderItem.SubItems.Add(VPNLogFile.Columns.Item(1).Text)
+            HeaderItem.SubItems.Add(LV_VPNLogFile.Columns.Item(1).Text)
 
             ' Valid
-            HeaderItem.SubItems.Add(VPNLogFile.Columns.Item(2).Text)
+            HeaderItem.SubItems.Add(LV_VPNLogFile.Columns.Item(2).Text)
 
-            VPNLogFile.Items.Add(HeaderItem)
+            LV_VPNLogFile.Items.Add(HeaderItem)
 
             ' Temp port as negative value
             Dim TempValidPort As Integer = -1
 
-            ' If no log files can be found search the registry to find it, this is need incase ProtonVPN has been updated to a new version
-            ' Check for the archived log file first
-            If Not File.Exists(Path.GetDirectoryName(My.Settings.FilePath) & "\service-logs.1.txt") Then
+            ' Are we locating the log file automaticlly?
+            If My.Settings.AutoFindLog = True Then
 
-                ' Check for the primary log file
-                If Not File.Exists(My.Settings.FilePath) Then
-
-                    Dim InstallLocationKeyPath As String = "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Proton VPN_is1"
-
-                    Using InstallLocationKey As RegistryKey = Registry.LocalMachine.OpenSubKey(InstallLocationKeyPath, False)
-
-                        If InstallLocationKey IsNot Nothing Then
-
-                            ' Get the install location
-                            Dim InstallLocationObject As Object = InstallLocationKey.GetValue("InstallLocation")
-
-                            If InstallLocationObject IsNot Nothing AndAlso TypeOf InstallLocationObject Is String Then
-
-                                Using VersionKey As RegistryKey = Registry.LocalMachine.OpenSubKey(InstallLocationKeyPath, False)
-
-                                    ' Get the current PrtonVPN vesion
-                                    Dim VersionObject As Object = InstallLocationKey.GetValue("DisplayVersion")
-
-                                    If VersionObject IsNot Nothing AndAlso TypeOf VersionObject Is String Then
-
-                                        ' Combine found information into file path
-                                        Dim LogFileLocation As String = InstallLocationObject & "v" & VersionObject & "\ServiceData\Logs\service-logs.txt"
-
-                                        ' If log file found via registry
-                                        If File.Exists(LogFileLocation) Then
-
-                                            ' Update settings and save
-                                            My.Settings.FilePath = LogFileLocation
-                                            My.Settings.Save()
-
-                                        End If
-
-                                    End If
-
-                                End Using
-
-                            End If
-
-                        End If
-
-                    End Using
-
-                End If
+                SetAutoLogFileLocation()
 
             End If
 
@@ -252,42 +226,48 @@ Public Class Main
 
                 End If
 
-            End If
+                ' Adjust column size
+                LV_VPNLogFile.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
-            ' Adjust column size
-            VPNLogFile.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+                ' Remove headers
+                LV_VPNLogFile.Items.RemoveAt(0)
 
-            ' Remove headers
-            VPNLogFile.Items.RemoveAt(0)
+                ' Ensures last row is visible
+                If (LV_VPNLogFile.Items.Count) > 0 Then
 
-            ' Highlists bottom row
-            If (VPNLogFile.Items.Count) > 0 Then
-
-                VPNLogFile.Items(VPNLogFile.Items.Count - 1).EnsureVisible()
-
-            End If
-
-            ' Do checks on port validity
-            If TempValidPort >= 0 Then
-
-                If LastValidPort <> TempValidPort Then
-
-                    ' Call task to push port update
-                    Dim DoTask As Task = UpdatePort(TempValidPort)
-
-                Else
-
-                    LogOutput("Connected to qBittorrent, no changes to port detected", True, False)
+                    LV_VPNLogFile.Items(LV_VPNLogFile.Items.Count - 1).EnsureVisible()
 
                 End If
 
+                ' Do checks on port validity
+                If TempValidPort >= 0 Then
+
+                    If LastValidPort <> TempValidPort Then
+
+                        ' Call task to push port update
+                        Dim DoTask As Task = UpdatePort(TempValidPort)
+
+                    Else
+
+                        LogOutput("Connected to qBittorrent, no changes to port detected", True, False)
+
+                    End If
+
+                Else
+
+                    LogOutput("No valid port information found in logs", True, False)
+
+                End If
+
+                GB_ProtonLog.Text = "ProtonVPN Log Files Output (Parsed) " & DateTime.Now
+
             Else
 
-                LogOutput("No valid port information found in logs", True, False)
+                ' ProtonVPN log files not found
+                LogOutput("Cannot locate ProtonVPN log files", True, False)
+                GB_ProtonLog.Text = "ProtonVPN Log Files Output (Parsed)"
 
             End If
-
-            VPNLogFileLabel.Text = "ProtonVPN Log File Output (Parsed) " & DateTime.Now
 
         Catch ex As Exception
 
@@ -297,12 +277,11 @@ Public Class Main
 
             ' Update UI
             UpdateSelectButton()
-            TestSaveButton.Enabled = True
-            UpdateButton.Text = "Update Port Now"
-            UpdateButton.Enabled = True
+            BTN_TestSaveUpdate.Enabled = True
+            UpdateConnectionUI()
 
             ' Ensure timer is enabled
-            MainTimer.Enabled = True
+            TMR_Main.Enabled = True
 
         End Try
 
@@ -370,17 +349,17 @@ Public Class Main
                             Dim Forward As String = ForwardArray(1)
 
                             ' Check for the string ","
-                            If Forward.Contains(",") Then
+                            If Forward.Contains(","c) Then
 
                                 ' Get string to the left of ",", this value is the port number as a string
                                 Dim PortStringArray As String() = Forward.Split(",")
                                 Dim PortString As String = PortStringArray(0)
 
                                 ' Create new listviewitem
-                                Dim NewItem As New ListViewItem(DateTime)
-
                                 ' Add the line to the listviewitem tag, used for double click on listviewitem, displays full line
-                                NewItem.Tag = Line
+                                Dim NewItem As New ListViewItem(DateTime) With {
+                                    .Tag = Line
+                                }
 
                                 ' Set port string so subitem
                                 NewItem.SubItems.Add(PortString)
@@ -433,7 +412,7 @@ Public Class Main
             Next
 
             ' Add items to listview
-            VPNLogFile.Items.AddRange(Items.ToArray)
+            LV_VPNLogFile.Items.AddRange(Items.ToArray)
 
             ' Return the port number
             Return TempPort
@@ -447,60 +426,93 @@ Public Class Main
 
     End Function
 
-    Private Sub MainTimer_Tick(sender As Object, e As EventArgs) Handles MainTimer.Tick
+    Private Sub TMR_Main_Tick(sender As Object, e As EventArgs) Handles TMR_Main.Tick
 
-        ' Increment the counter
-        TimerCount = TimerCount + 1
+        Try
 
-        If TimerCount >= 60 Then
+            ' Increment the counter
+            TimerCount += 1
 
-            ' Process task
-            Dim DoTask As Task = CheckConnection()
+            ' 60 ticks is 1 min
+            If TimerCount = 60 Then
 
-            ' Reset the counter
-            TimerCount = 0
+                ' Process task
+                Dim DoTask As Task = CheckConnection()
 
-        End If
+            End If
 
-        ' Update the progressbar
-        MainProgressBar.Value = TimerCount
+            ' At 61 we reset the counter
+            If TimerCount >= 61 Then
+
+                ' Reset the counter
+                TimerCount = 0
+
+            End If
+
+            ' Update the progressbar
+            PRG_Main.Value = TimerCount
+
+        Catch ex As Exception
+
+            LogOutput(ex.Message, True, True)
+
+        End Try
 
     End Sub
 
     ' Extra WndProc funcationality
     Protected Overrides Sub WndProc(ByRef m As Message)
 
-        Dim State As FormWindowState = Me.WindowState
-        MyBase.WndProc(m)
-        If Me.WindowState <> State Then Me.OnFormWindowStateChanged(EventArgs.Empty)
+        Try
+
+            ' Raise window event
+            Dim State As FormWindowState = Me.WindowState
+            MyBase.WndProc(m)
+            If Me.WindowState <> State Then Me.OnFormWindowStateChanged(EventArgs.Empty)
+
+        Catch ex As Exception
+
+            LogOutput(ex.Message, True, True)
+
+        End Try
 
     End Sub
 
     ' Makes sure the problem minimizes to/from the system tray
     Protected Overridable Sub OnFormWindowStateChanged(ByVal e As EventArgs)
 
-        If Me.WindowState = FormWindowState.Normal Then
+        Try
 
-            ' Show the main program window
-            Me.ShowInTaskbar = True
-            Me.Show()
-            Me.BringToFront()
+            ' Check the window state
+            If Me.WindowState = FormWindowState.Normal Then
 
-        Else
+                ' Show the main program window
+                Me.ShowInTaskbar = True
+                Me.Show()
+                Me.BringToFront()
 
-            ' Hide to the system tray
-            Me.ShowInTaskbar = False
-            Me.Hide()
+            Else
 
-        End If
+                ' Hide to the system tray
+                Me.ShowInTaskbar = False
+                Me.Hide()
+
+            End If
+
+        Catch ex As Exception
+
+            LogOutput(ex.Message, True, True)
+
+        End Try
+
     End Sub
-
 
     ' Runs at program startup
     Private Sub Main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         Try
 
+            ' Are we upgrading from an older version of Quantum?
             If My.Settings.UpgradeRequired Then
 
                 ' Copy settings from previous version
@@ -517,44 +529,117 @@ Public Class Main
 
         End Try
 
-        ' Set the main form title with version number
-        Me.Text = Me.Text & " - v" & My.Application.Info.Version.ToString
+        Try
 
-        ' Set the main form size
-        Me.Size = New Size(410, 390)
+            ' Set tooltip for custom checkbox
+            TBE_Startup.SetToolTip(TT_Main)
+            TBE_LogFile.SetToolTip(TT_Main)
 
-        ' Make sure the first tab is selected
-        MainTabControl.SelectedIndex = 0
+            ' Set the main form title with version number
+            Me.Text = My.Application.Info.AssemblyName & " - v" & My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor & "." & My.Application.Info.Version.Build
 
-        ' Set the systemtray right click menu
-        NotifyIcon.ContextMenuStrip = TrayContextMenuStrip
+            ' Set the main form size
+            Me.Size = New Size(433, 433)
 
-        ' If this is the first time the problem has been run
-        If My.Settings.FirstRun = True Then
+            ' Make sure the first tab is selected
+            TAB_Main.SelectedIndex = 0
 
-            ' Show program disclaimer
-            MessageBox.Show(AboutLabelLinkProtonVPN.Text, "Disclaimer!")
+            ' Set the systemtray right click menu
+            NI_Main.ContextMenuStrip = CMS_Main
 
-            ' Update settings so this message is not shown again
-            My.Settings.FirstRun = False
-            My.Settings.Save()
+            ' If this is the first time the problem has been run
+            If My.Settings.FirstRun = True Then
 
-            ' Add the program to autorun
-            AddStartupEntry()
+                ' Show program disclaimer
+                MessageBox.Show(LNK_AboutProtonVPN.Text, "Disclaimer!")
 
-            ' Popup on screen
-            Me.WindowState = FormWindowState.Normal
-            Me.Show()
+                ' Update settings so this message is not shown again
+                My.Settings.FirstRun = False
+                My.Settings.Save()
 
-        Else
+                ' Add the program to autorun
+                AddStartupEntry()
 
-            Me.Close()
+                ' Popup on screen
+                Me.WindowState = FormWindowState.Normal
+                Me.Show()
 
-        End If
+            Else
 
-        ' If no log file can be found search the registry to find it
-        If Not File.Exists(My.Settings.FilePath) Then
+                Me.Close()
 
+            End If
+
+            ' Are we locating the ProtonVPN log files automaticlly?
+            If My.Settings.AutoFindLog = True Then
+
+                TBE_LogFile.Checked = True
+
+                SetAutoLogFileLocation()
+
+            End If
+
+            ' If log file still does not exist
+            If Not File.Exists(My.Settings.FilePath) Then
+
+                ' If Quantum is not trying to find the log file automaticlly
+                If My.Settings.AutoFindLog = False Then
+
+                    ' Prompt the user to locate the log file
+                    SelectLogFileManually(True)
+
+                End If
+
+            End If
+
+            ' Update the select button UI
+            UpdateSelectButton()
+
+            ' Update UI with saved host/user/pass
+            TXT_Host.Text = My.Settings.Host
+            TXT_Username.Text = My.Settings.Username
+            TXT_Password.Text = My.Settings.Password
+
+            ' Check registry for autorun and update UI
+            Dim KeyPath As String = "SOFTWARE\Microsoft\Windows\CurrentVersion\Run\"
+
+            Using Key As RegistryKey = Registry.CurrentUser.OpenSubKey(KeyPath, False)
+
+                If Key IsNot Nothing Then
+
+                    Dim ValueObject As Object = Key.GetValue("Quantum")
+
+                    If ValueObject IsNot Nothing Then
+
+                        ' Program is set to autorun
+                        TBE_Startup.Checked = True
+
+                    End If
+
+                End If
+
+            End Using
+
+            UpdateConnectionUI()
+
+            LogOutput("Quantum Started!", True, False)
+
+            ' Call task to check for a qBittorrent connection
+            Dim DoTask As Task = CheckConnection()
+
+        Catch ex As Exception
+
+            LogOutput(ex.Message, True, True)
+
+        End Try
+
+    End Sub
+
+    Private Sub SetAutoLogFileLocation()
+
+        Try
+
+            ' This is the registry folder used by ProtonVPN to store install information
             Dim InstallLocationKeyPath As String = "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Proton VPN_is1"
 
             Using InstallLocationKey As RegistryKey = Registry.LocalMachine.OpenSubKey(InstallLocationKeyPath, False)
@@ -595,72 +680,102 @@ Public Class Main
 
             End Using
 
-        End If
+        Catch ex As Exception
 
-        ' If log file still does not exist
-        If Not File.Exists(My.Settings.FilePath) Then
+            LogOutput(ex.Message, True, True)
 
-            ' Prompt the user to locate the log file
-            SelectLogFileManually(True)
-
-        End If
-
-        UpdateSelectButton()
-
-        ' Update UI with saved host/user/pass
-        HostTextBox.Text = My.Settings.Host
-        UsernameTextBox.Text = My.Settings.Username
-        PasswordTextBox.Text = My.Settings.Password
-
-        ' Check registry for autorun and update UI
-        Dim KeyPath As String = "SOFTWARE\Microsoft\Windows\CurrentVersion\Run\"
-
-        Using Key As RegistryKey = Registry.CurrentUser.OpenSubKey(KeyPath, False)
-
-            If Key IsNot Nothing Then
-
-                Dim ValueObject As Object = Key.GetValue("Quantum")
-
-                If ValueObject IsNot Nothing Then
-
-                    ' Program is set to autorun
-                    StartUpCheckBox.Checked = True
-
-                End If
-
-            End If
-
-        End Using
-
-        LogOutput("Quantum Started!", True, False)
-
-        ' Call task to check for a qBittorrent connection
-        Dim DoTask As Task = CheckConnection()
+        End Try
 
     End Sub
 
     ' Sets the label for the LogFile button
     Private Sub UpdateSelectButton()
 
-        If File.Exists(My.Settings.FilePath) Then
+        Try
 
-            ' If log file found update the UI
-            LogFileSelectButton.Text = "ProtonVPN Log File Found!   (...)"
+            If File.Exists(My.Settings.FilePath) Then
 
-        Else
+                If My.Settings.AutoFindLog = True Then
 
-            ' If log file not found update the UI
-            LogFileSelectButton.Text = "Select ProtonVPN Log File   (...)"
+                    ' If log file found update the UI
+                    BTN_LogFile.Text = "ProtonVPN Log Files Found!"
 
-        End If
+                    BTN_LogFile.Enabled = False
+
+                    ' Update the tooltips
+                    TT_Main.SetToolTip(TBE_LogFile, My.Settings.FilePath)
+                    TT_Main.SetToolTip(BTN_LogFile, "")
+
+                Else
+
+                    ' If log file found update the UI
+                    BTN_LogFile.Text = "ProtonVPN Log Files Found!   (...)"
+
+                    BTN_LogFile.Enabled = True
+
+                    ' Update the tooltips
+                    TT_Main.SetToolTip(TBE_LogFile, "Enabling this setting is recommended")
+                    TT_Main.SetToolTip(BTN_LogFile, My.Settings.FilePath)
+
+                End If
+
+            Else
+
+                If My.Settings.AutoFindLog = True Then
+
+                    ' If log file not found update the UI
+                    BTN_LogFile.Text = "Unable to locate ProtonVPN Logs File"
+
+                    BTN_LogFile.Enabled = False
+
+                    ' Update the tooltips
+                    TT_Main.SetToolTip(TBE_LogFile, My.Settings.FilePath)
+                    TT_Main.SetToolTip(BTN_LogFile, "")
+
+                Else
+
+                    ' If log file not found update the UI
+                    BTN_LogFile.Text = "Unable to locate ProtonVPN Log Files   (...)"
+
+                    BTN_LogFile.Enabled = True
+
+                    ' Update the tooltips
+                    TT_Main.SetToolTip(TBE_LogFile, "Enabling this setting is recommended")
+                    TT_Main.SetToolTip(BTN_LogFile, My.Settings.FilePath)
+
+                End If
+
+            End If
+
+        Catch ex As Exception
+
+            LogOutput(ex.Message, True, True)
+
+        End Try
 
     End Sub
 
     ' User clicked Test/Save button
-    Private Sub TestSaveButton_Click(sender As Object, e As EventArgs) Handles TestSaveButton.Click
+    Private Sub BTN_TestSaveUpdate_Click(sender As Object, e As EventArgs) Handles BTN_TestSaveUpdate.Click
 
-        ' Call task to test then save settings
-        Dim DoTask As Task = TestSaveSettings()
+        Try
+
+            If BTN_TestSaveUpdate.Text = "Update Port Now" Then
+
+                Dim DoTaskUpdate As Task = CheckConnection()
+
+            Else
+
+                ' Call task to test then save settings
+                Dim DoTaskTestSave As Task = TestSaveSettings()
+
+            End If
+
+        Catch ex As Exception
+
+            LogOutput(ex.Message, True, True)
+
+        End Try
 
     End Sub
 
@@ -805,14 +920,6 @@ Public Class Main
 
     End Sub
 
-    ' User clicked log file selcect button
-    Private Sub LogFileSelectButton_Click(sender As Object, e As EventArgs) Handles LogFileSelectButton.Click
-
-        ' Show prompt
-        SelectLogFileManually()
-
-    End Sub
-
     ' Quantum log filter
     Private Sub LogOutput(ByVal pString As String, ByVal pLog As Boolean, ByVal pError As Boolean)
 
@@ -823,12 +930,12 @@ Public Class Main
 
                 Dim Ignore As Boolean = False
 
-                If QLogFile.Items.Count > 0 Then
+                If LV_QLog.Items.Count > 0 Then
 
-                    If QLogFile.Items.Item(QLogFile.Items.Count - 1).SubItems.Item(1).Text = pString Then
+                    If LV_QLog.Items.Item(LV_QLog.Items.Count - 1).SubItems.Item(1).Text = pString Then
 
                         ' Event is the same as the last log entry, update the existing entrys date/time
-                        QLogFile.Items.Item(QLogFile.Items.Count - 1).SubItems.Item(0).Text = DateAndTime.Now.ToString
+                        LV_QLog.Items.Item(LV_QLog.Items.Count - 1).SubItems.Item(0).Text = DateAndTime.Now.ToString
                         Ignore = True
 
                     End If
@@ -840,17 +947,17 @@ Public Class Main
                     ' New event
                     Dim HeaderItem As New ListViewItem(DateAndTime.Now.ToString)
                     HeaderItem.SubItems.Add(pString)
-                    QLogFile.Items.Add(HeaderItem)
+                    LV_QLog.Items.Add(HeaderItem)
 
                 End If
 
-                ' Select the bottom entry
-                QLogFile.Items(QLogFile.Items.Count - 1).EnsureVisible()
+                ' Ensures last row is visible
+                LV_QLog.Items(LV_QLog.Items.Count - 1).EnsureVisible()
 
                 ' Dont show more then 100 entries
-                If QLogFile.Items.Count > 100 Then
+                If LV_QLog.Items.Count > 100 Then
 
-                    QLogFile.Items.RemoveAt(0)
+                    LV_QLog.Items.RemoveAt(0)
 
                 End If
 
@@ -860,12 +967,12 @@ Public Class Main
             If pError = True Then
 
                 ' Update toolstrip
-                ToolStripStatusLabel.Text = "Error, check logs for more information - " & DateTime.Now.ToShortTimeString
+                TSSL_Main.Text = "Error, check logs for more information - " & DateTime.Now.ToShortTimeString
 
             Else
 
                 ' Update toolstrip
-                ToolStripStatusLabel.Text = pString & " - " & DateTime.Now.ToShortTimeString
+                TSSL_Main.Text = pString & " - " & DateTime.Now.ToShortTimeString
 
             End If
 
@@ -878,93 +985,89 @@ Public Class Main
     ' User closed window or application is shutting down
     Private Sub Main_Closing(sender As Object, e As System.Windows.Forms.FormClosingEventArgs) Handles Me.Closing
 
-        ' If we are not logging off, or shutting down
-        If e.CloseReason <> CloseReason.WindowsShutDown Then
-
-            ' Cancel closing the applcation and minimize to tray
-            e.Cancel = True
-            Me.WindowState = FormWindowState.Minimized
-            Me.Hide()
-
-        End If
-
-    End Sub
-
-    ' User double clicked the Quantum icon in the system tray
-    Private Sub NotifyIcon_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles NotifyIcon.MouseDoubleClick
-
-        ' If we are currently on screen
-        If Me.WindowState = FormWindowState.Normal Then
-
-            ' Hide to system tray
-            Me.Close()
-
-        Else
-
-            ' Currently in the system tray, popup on desktop
-            Me.Show()
-            Me.WindowState = FormWindowState.Normal
-            Me.BringToFront()
-
-        End If
-
-    End Sub
-
-    ' User clicked 'Update Port Now' button
-    Private Sub UpdateButton_Click(sender As Object, e As EventArgs) Handles UpdateButton.Click
-
         Try
 
-            ' Reset the counter
-            TimerCount = 0
+            ' If we are not logging off, or shutting down
+            If e.CloseReason <> CloseReason.WindowsShutDown Then
 
-            ' Reset the progressbar
-            MainProgressBar.Value = 0
+                ' Cancel closing the applcation and minimize to tray
+                e.Cancel = True
+                Me.WindowState = FormWindowState.Minimized
+                Me.Hide()
 
-            ' Call task to test connection, this allways checks for an updated port
-            Dim DoTask As Task = CheckConnection()
+            End If
 
         Catch ex As Exception
 
             LogOutput(ex.Message, True, True)
 
-        Finally
+        End Try
+
+    End Sub
+
+    ' User double clicked the Quantum icon in the system tray
+    Private Sub NI_Main_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles NI_Main.MouseDoubleClick
+
+        Try
+
+            ' If we are currently on screen
+            If Me.WindowState = FormWindowState.Normal Then
+
+                ' Hide to system tray
+                Me.Close()
+
+            Else
+
+                ' Currently in the system tray, popup on desktop
+                Me.Show()
+                Me.WindowState = FormWindowState.Normal
+                Me.BringToFront()
+
+            End If
+
+        Catch ex As Exception
+
+            LogOutput(ex.Message, True, True)
 
         End Try
 
     End Sub
 
     ' User clicks a log entry for the ProtonVPN log
-    Private Sub VPNLogFile_DoubleClick(sender As Object, e As EventArgs) Handles VPNLogFile.DoubleClick
+    Private Sub LV_VPNLogFile_DoubleClick(sender As Object, e As EventArgs) Handles LV_VPNLogFile.DoubleClick
 
         Try
 
-            If VPNLogFile.SelectedItems.Count > 0 Then
+            If LV_VPNLogFile.SelectedItems.Count > 0 Then
 
                 ' Display the full unparsed line
-                MessageBox.Show(VPNLogFile.SelectedItems(0).Tag.ToString, "ProtonVPN Log File Entry")
+                MessageBox.Show(LV_VPNLogFile.SelectedItems(0).Tag.ToString, "ProtonVPN Log File Entry")
 
             End If
 
         Catch ex As Exception
+
+            LogOutput(ex.Message, True, True)
 
         End Try
 
     End Sub
 
     ' User clicks a log entry for the Quantum log
-    Private Sub PQLogFile_DoubleClick(sender As Object, e As EventArgs) Handles QLogFile.DoubleClick
+    Private Sub LV_QLog_DoubleClick(sender As Object, e As EventArgs) Handles LV_QLog.DoubleClick
 
         Try
 
-            If QLogFile.SelectedItems.Count > 0 Then
+            If LV_QLog.SelectedItems.Count > 0 Then
 
                 ' Display the log entry
-                MessageBox.Show(QLogFile.SelectedItems(0).SubItems.Item(1).Text, "Quantum Log Entry - " & QLogFile.SelectedItems(0).SubItems.Item(0).Text)
+                MessageBox.Show(LV_QLog.SelectedItems(0).SubItems.Item(1).Text, "Quantum Log Event - " & LV_QLog.SelectedItems(0).SubItems.Item(0).Text)
 
             End If
 
         Catch ex As Exception
+
+            LogOutput(ex.Message, True, True)
 
         End Try
 
@@ -979,13 +1082,8 @@ Public Class Main
 
             Using Key As RegistryKey = Registry.CurrentUser.OpenSubKey(KeyPath, True)
 
-                ' If run exists
-                If Key IsNot Nothing Then
-
-                    ' Add applcation to autorun
-                    Key.SetValue(Application.ProductName, Application.ExecutablePath)
-
-                End If
+                ' If key exists, add applcation to autorun
+                Key?.SetValue(Application.ProductName, Application.ExecutablePath)
 
             End Using
 
@@ -1006,13 +1104,8 @@ Public Class Main
 
             Using Key As RegistryKey = Registry.CurrentUser.OpenSubKey(KeyPath, True)
 
-                ' If run exists
-                If Key IsNot Nothing Then
-
-                    ' Remove applcation from autorun
-                    Key.DeleteValue(Application.ProductName, False)
-
-                End If
+                ' If key exists, remove applcation from autorun
+                Key?.DeleteValue(Application.ProductName, False)
 
             End Using
 
@@ -1024,110 +1117,102 @@ Public Class Main
 
     End Sub
 
-    ' User clicked autorun at startup checkbox
-    Private Sub StartUpCheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles StartUpCheckBox.CheckedChanged
-
-        ' User enable autorun
-        If StartUpCheckBox.Checked Then
-
-            ' Add to registry
-            AddStartupEntry()
-
-        Else
-
-            ' Prompt the user is sure they want to remove autorun
-            Dim Result As DialogResult = MessageBox.Show("Are you sure you want to delete the startup entry?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-
-            If Result = DialogResult.Yes Then
-
-                ' Delete from registry
-                DeleteStartupEntry()
-
-            Else
-
-                ' User selected not to remove from registry, add the checkmark back
-                StartUpCheckBox.Checked = True
-
-            End If
-
-        End If
-
-    End Sub
-
     ' User selected to exit applcation
-    Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
+    Private Sub TSMI_Exit_Click(sender As Object, e As EventArgs) Handles TSMI_Exit.Click
 
-        ' Shutdown Quantum
-        Application.Exit()
+        Try
+
+            ' Shutdown Quantum
+            Application.Exit()
+
+        Catch ex As Exception
+
+        End Try
 
     End Sub
 
     ' Runs when the form is visiable, adjusts columns for better fit
     Private Sub Main_VisibleChanged(sender As Object, e As EventArgs) Handles Me.VisibleChanged
 
-        ' Have we already done this?
-        If Not LogScalingSet Then
+        Try
 
-            ' Make sure the form is visible, need to be on screen to work correctly
-            If Me.Visible Then
+            ' Have we already done this?
+            If Not LogScalingSet Then
 
-                Dim HeaderItem As New ListViewItem(DateTime.Now.ToString)
-                HeaderItem.SubItems.Add(QLogFile.Columns.Item(1).Text)
+                ' Make sure the form is visible, need to be on screen to work correctly
+                If Me.Visible Then
 
-                ' Add dummy item to listview
-                QLogFile.Items.Add(HeaderItem)
+                    Dim HeaderItem As New ListViewItem(DateTime.Now.ToString)
+                    HeaderItem.SubItems.Add(LV_QLog.Columns.Item(1).Text)
 
-                ' Auto resize columns
-                QLogFile.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
+                    ' Add dummy item to listview
+                    LV_QLog.Items.Add(HeaderItem)
 
-                ' Remove dummy
-                QLogFile.Items.RemoveAt(0)
+                    ' Auto resize columns
+                    LV_QLog.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent)
 
-                ' Adjust for scrollbar
-                QEvent.Width = (QLogFile.ClientSize.Width - QDateTime.Width - SystemInformation.VerticalScrollBarWidth) - 7
+                    ' Remove dummy
+                    LV_QLog.Items.RemoveAt(0)
 
-                ' Completed, doesnt need to be done again
-                LogScalingSet = True
+                    ' Adjust for scrollbar
+                    CH_QEvent.Width = (LV_QLog.ClientSize.Width - CH_QDateTime.Width - SystemInformation.VerticalScrollBarWidth) - 7
+
+                    ' Completed, doesnt need to be done again
+                    LogScalingSet = True
+
+                End If
 
             End If
 
-        End If
+            If Me.Visible = True Then
 
-        If Me.Visible = True Then
+                'Change the label to 'Hide'
+                TSMI_ShowHide.Text = "Hide"
 
-            'Change the label to 'Hide'
-            ShowHideToolStripMenuItem.Text = "Hide"
+            Else
 
-        Else
+                'Change the label to 'Show'
+                TSMI_ShowHide.Text = "Show"
 
-            'Change the label to 'Show'
-            ShowHideToolStripMenuItem.Text = "Show"
+            End If
 
-        End If
+        Catch ex As Exception
+
+            LogOutput(ex.Message, True, True)
+
+        End Try
 
     End Sub
 
     ' User clicks hide/show in the system tray
-    Private Sub ShowHideToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ShowHideToolStripMenuItem.Click
+    Private Sub TSMI_ShowHide_Click(sender As Object, e As EventArgs) Handles TSMI_ShowHide.Click
 
-        If Me.Visible = True Then
+        Try
 
-            ' Close the window
-            Me.Close()
+            If Me.Visible = True Then
 
-        Else
+                ' Close the window
+                Me.Close()
 
-            ' Popup on desktop
-            Me.Show()
-            Me.WindowState = FormWindowState.Normal
-            Me.BringToFront()
+            Else
 
-        End If
+                ' Popup on desktop
+                Me.Show()
+                Me.WindowState = FormWindowState.Normal
+                Me.BringToFront()
+
+            End If
+
+        Catch ex As Exception
+
+            LogOutput(ex.Message, True, True)
+
+        End Try
 
     End Sub
 
     ' User clicks 'Update Port Now' in the system tray
-    Private Sub UpdateNowToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UpdateNowToolStripMenuItem.Click
+    Private Sub TSMI_UpdateNow_Click(sender As Object, e As EventArgs) Handles TSMI_UpdateNow.Click
 
         Try
 
@@ -1138,31 +1223,207 @@ Public Class Main
 
             LogOutput(ex.Message, True, True)
 
-        Finally
-
         End Try
 
     End Sub
 
     ' Opens the default webbrowser to the Quantum GitHub page
-    Private Sub AboutLinkLabel_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles AboutLinkLabel.LinkClicked
+    Private Sub LNK_About_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LNK_About.LinkClicked
 
-        ' Define URL
-        Dim GitURL As String = "https://github.com/UHAXM1/Quantum"
+        Try
 
-        ' Launch the webbrowser
-        Process.Start(New ProcessStartInfo(GitURL) With {.UseShellExecute = True})
+            ' Define URL
+            Dim GitURL As String = "https://github.com/UHAXM1/Quantum/releases"
+
+            ' Launch the webbrowser
+            Process.Start(New ProcessStartInfo(GitURL) With {.UseShellExecute = True})
+
+        Catch ex As Exception
+
+            LogOutput(ex.Message, True, True)
+
+        End Try
 
     End Sub
 
     ' Opens the default webbrowser to the Proton homepage
-    Private Sub AboutLabelLinkProtonVPN_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles AboutLabelLinkProtonVPN.LinkClicked
+    Private Sub LNK_AboutProtonVPN_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LNK_AboutProtonVPN.LinkClicked
 
-        ' Define URL
-        Dim ProtonURL As String = "https://proton.me/"
+        Try
 
-        ' Launch the webbrowser
-        Process.Start(New ProcessStartInfo(ProtonURL) With {.UseShellExecute = True})
+            ' Define URL
+            Dim ProtonURL As String = "https://proton.me/"
+
+            ' Launch the webbrowser
+            Process.Start(New ProcessStartInfo(ProtonURL) With {.UseShellExecute = True})
+
+        Catch ex As Exception
+
+            LogOutput(ex.Message, True, True)
+
+        End Try
+
+    End Sub
+
+    ' User clicked set manual or automatic log file location
+    Private Sub TBE_LogFile_CheckedChanged(sender As Object, e As EventArgs) Handles TBE_LogFile.CheckedChanged
+
+        Try
+
+            If TBE_LogFile.Checked Then
+
+                ' User enabled automaic log file location
+                My.Settings.AutoFindLog = True
+
+            Else
+
+                ' Prompt the user is sure they want to remove autorun
+                Dim Result As DialogResult = MessageBox.Show("Are you sure you want to disable automatic log file location?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+                If Result = DialogResult.Yes Then
+
+                    ' User disabled automatic log file location
+                    My.Settings.AutoFindLog = False
+
+                Else
+
+                    ' User selected not to disable auto location, add the checkmark back
+                    TBE_LogFile.Checked = True
+
+                    My.Settings.AutoFindLog = True
+
+                End If
+
+            End If
+
+            ' Save settings
+            My.Settings.Save()
+
+            ' Update UI
+            UpdateSelectButton()
+
+        Catch ex As Exception
+
+            LogOutput(ex.Message, True, True)
+
+        End Try
+
+    End Sub
+
+    ' User clicked log file selcect button
+    Private Sub BTN_LogFile_Click(sender As Object, e As EventArgs) Handles BTN_LogFile.Click
+
+        Try
+
+            ' Show prompt
+            SelectLogFileManually()
+
+        Catch ex As Exception
+
+            LogOutput(ex.Message, True, True)
+
+        End Try
+
+    End Sub
+
+    Private Sub TBE_Startup_CheckedChanged(sender As Object, e As EventArgs) Handles TBE_Startup.CheckedChanged
+
+        Try
+
+            ' User enable autorun
+            If TBE_Startup.Checked Then
+
+                ' Add to registry
+                AddStartupEntry()
+
+            Else
+
+                ' Prompt the user is sure they want to remove autorun
+                Dim Result As DialogResult = MessageBox.Show("Are you sure you want to delete the startup entry?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+                If Result = DialogResult.Yes Then
+
+                    ' Delete from registry
+                    DeleteStartupEntry()
+
+                Else
+
+                    ' User selected not to remove from registry, add the checkmark back
+                    TBE_Startup.Checked = True
+
+                End If
+
+            End If
+
+        Catch ex As Exception
+
+            LogOutput(ex.Message, True, True)
+
+        End Try
+
+
+    End Sub
+
+    Private Sub UpdateConnectionUI()
+
+        Dim Update As Boolean = False
+
+        Dim TempHost As String = TXT_Host.Text
+        If TempHost = TXT_Host.Tag Then
+            TempHost = ""
+        End If
+
+        Dim TempUser As String = TXT_Username.Text
+        If TempUser = TXT_Username.Tag Then
+            TempUser = ""
+        End If
+
+        Dim TempPass As String = TXT_Password.Text
+        If TempPass = TXT_Password.Tag Then
+            TempPass = ""
+        End If
+
+        If TempHost = My.Settings.Host Then
+
+            If TempUser = My.Settings.Username Then
+
+                If TempPass = My.Settings.Password Then
+
+                    Update = True
+
+                End If
+
+            End If
+
+        End If
+
+        If Update = True Then
+
+            BTN_TestSaveUpdate.Text = "Update Port Now"
+
+        Else
+
+            BTN_TestSaveUpdate.Text = "Test/Save Settings"
+
+        End If
+
+    End Sub
+
+    Private Sub TXT_Host_TextChanged(sender As Object, e As EventArgs) Handles TXT_Host.TextChanged
+
+        UpdateConnectionUI()
+
+    End Sub
+
+    Private Sub TXT_Username_TextChanged(sender As Object, e As EventArgs) Handles TXT_Username.TextChanged
+
+        UpdateConnectionUI()
+
+    End Sub
+
+    Private Sub TXT_Password_TextChanged(sender As Object, e As EventArgs)
+
+        UpdateConnectionUI()
 
     End Sub
 

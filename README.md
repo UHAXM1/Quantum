@@ -2,7 +2,10 @@
 
 This application will monitor the Windows ProtonVPN client log files for port changes and pass them via the qBittorrent WebUI.
 
-Uses the qBittorrent-net-client library found here
+In order to close this repository you need to use the following command, or it wont clone the linked submodules
+git clone --recurse-submodules https://github.com/UHAXM1/Quantum
+
+Uses the linked submodule qBittorrent-net-client found here
 https://github.com/fedarovich/qbittorrent-net-client
 
 Tested with ProtonVPN version 3.3.2
@@ -58,16 +61,15 @@ Quantum setup
 		Enable or Disable Quantum from running when the user logs into the computer, this is account specific.
 		
 	Log File Location:
-		Quantum will try to find the ProtonVPN log file automatically, however if it cannot click the Log File Button to select manually select a location.
+		Quantum will try to find the ProtonVPN log file automatically, however if you prefer you can select the location manually, note that you do it manually you need to update the location each time after you update ProtonVPN, I suggest you leave this setting on automatic.
 		
 	qBittorrent Configuration:
 		Host: this should be 'http://127.0.0.1:8080' by default, if you are not using the default port or want to connect to a remote instance change the ip and port number here, if you are using SSL you need to change http to https.
 		Username and Password: Input the username and password you setup in the qBittorrent setup above, if you have enabled Bypass authentication for client on localhost and are local you can leave this blank.
 		
-	Test/Save:
-		Click this button to Test then save the current configuration, you will get a popup telling you if the connection is a successful.
-		
-	Force Port Update Now:
-		Click this button to force Quantum to do a port update right away. Only needs to be used if you cant be bothered waiting for the next poll.
-		
+	Test/Save/Update Port Now:
+		This button is dynamic and changes function depending on what has been selected above.
+		'Test\Save' will test then save the current configuration if it connects, you will get a popup telling you if the connection is a successful.
+		'Update Port Now' will force Quantum to update the port right away without waiting for the timer to count down.
+
 Setup should now be complete, you can close Quantum by clicking the close window button (it will minimize to the system tray).
