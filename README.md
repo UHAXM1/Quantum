@@ -2,7 +2,7 @@
 
 This application will monitor the Windows ProtonVPN client log files for port changes and pass them via the qBittorrent WebUI.
 
-In order to close this repository you need to use the following command, or it wont clone the linked submodules
+In order to clone this repository you need to use the following command, or it wont clone the linked submodules
 git clone --recurse-submodules https://github.com/UHAXM1/Quantum
 
 Uses the linked submodule qBittorrent-net-client found here
