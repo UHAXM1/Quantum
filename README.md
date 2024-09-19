@@ -5,7 +5,7 @@ This application will monitor the Windows ProtonVPN client log files for port ch
 In order to clone this repository you need to use the following command, or it wont clone the linked submodules
 "git clone --recurse-submodules https://github.com/UHAXM1/Quantum"
 
-Uses the linked submodule qBittorrent-net-client found here
+Quantum uses the linked submodule qBittorrent-net-client found here
 https://github.com/fedarovich/qbittorrent-net-client
 
 Tested with ProtonVPN version 3.3.2
